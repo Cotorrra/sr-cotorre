@@ -10,11 +10,18 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!ah')
 
+ah_all_cards = sorted([c for c in requests.get('https://es.arkhamdb.com/api/public/cards?encounter=1').json()],
+                   key=lambda card: card['name'])
+
 ah_player = sorted([c for c in requests.get('https://es.arkhamdb.com/api/public/cards?encounter=0').json()],
-                key=lambda card: card['name'])
+                   key=lambda card: card['name'])
 # only encounter cards cards
-ah_encounter= [c for c in [sorted([c for c in requests.get('https://es.arkhamdb.com/api/public/cards?encounter=1').json()],
-                key=lambda card: card['name'])] if "spoilers" in c]
+ah_encounter = [c for c in ah_all_cards if "spoiler" in c]
+
+ah_deck_cards = sorted
+
+showing = True
+
 
 @bot.event
 async def on_ready():
@@ -27,8 +34,31 @@ async def look_for_player_card(ctx, query: str):
     my_card = query_cards[0]
 
     if my_card['type_code'] == "investigator":
-        await ctx.send(format_inv_card_f(my_card))
+        response = format_inv_card_f(my_card)
+
     else:
-        await ctx.send(format_player_card(my_card))
+        response = format_player_card(my_card)
+
+    await dev_send(showing, ctx, response)
+
+
+@bot.command(name='d', help='Busca cartas de Jugador y de Investigador en ArkhamDB')
+async def look_for_deck(ctx, code: str):
+    req = requests.get('https://es.arkhamdb.com/api/public/decklist/%s' % code).json()
+    if req == {}:
+        response = "El Mazo que buscas no existe :c"
+    else:
+        deck_info = format_deck_cards(req, ah_all_cards)
+        response = format_deck(req, deck_info)
+
+    await dev_send(showing, ctx, response)
+
+
+async def dev_send(debug, ctx, string):
+    if debug:
+        await ctx.send("```%s```" % string)
+    else:
+        await ctx.send(string)
+
 
 bot.run(TOKEN)
