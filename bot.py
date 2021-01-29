@@ -1,3 +1,4 @@
+import json
 import os
 import random
 
@@ -10,15 +11,12 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!ah')
 
-ah_all_cards = sorted([c for c in requests.get('https://es.arkhamdb.com/api/public/cards?encounter=1').json()],
-                   key=lambda card: card['name'])
+ah_all_cards = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=1').json()
 
-ah_player = sorted([c for c in requests.get('https://es.arkhamdb.com/api/public/cards?encounter=0').json()],
-                   key=lambda card: card['name'])
-# only encounter cards cards
+ah_player = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=0').json()
+
+# Encounter cards include: Special player cards, Weaknesses, enemies, acts, plans, etc.
 ah_encounter = [c for c in ah_all_cards if "spoiler" in c]
-
-ah_deck_cards = sorted
 
 showing = True
 
@@ -29,27 +27,69 @@ async def on_ready():
 
 
 @bot.command(name='j', help='Busca cartas de Jugador y de Investigador en ArkhamDB')
-async def look_for_player_card(ctx, query: str):
-    query_cards = [c for c in ah_player if c['name'].lower().__contains__(query.lower())]
-    my_card = query_cards[0]
+async def look_for_player_card(ctx):
 
-    if my_card['type_code'] == "investigator":
-        response = format_inv_card_f(my_card)
+    # TODO: Pedir con subtexto (para las versiones distintas de cartas)
+    # TODO: Pedir por nivel
+
+    query = ' '.join(ctx.message.content.split()[1:])
+    lvl_mode = False
+    lvl_query = ""
+    sub_text_mode = False
+    sub_query = ""
+
+    if query.__contains__("(") and query.__contains__(")"):
+        lvl_mode = True
+        (query, lvl_query) = find_and_extract(query, "(", ")")
+
+    if query.find("~") >= 0:
+        sub_text_mode = True
+        query = query.replace("~%s~" % sub_query, "", 1)
+        (query, sub_query) = find_and_extract(query, "~", "~")
+
+    r_cards = sorted([c for c in ah_player if hits_in_string(c['name'], query) > 0],
+                     key=lambda card: -hits_in_string(card['name'], query))
+
+    if sub_text_mode:
+        r_cards = [c for c in r_cards if filter_by_subtext(c, sub_query)]
+
+    if lvl_mode:
+        r_cards = [c for c in r_cards if filter_by_level(c, int(lvl_query))]
+
+    if len(r_cards) == 0:
+        response = "No encontré ninguna carta :c"
 
     else:
-        response = format_player_card(my_card)
+        if r_cards[0]['type_code'] == "investigator":
+            response = format_inv_card_f(r_cards[0])
+        else:
+            response = format_player_card(r_cards[0])
+
+        if len(r_cards) > 1:
+            response += "\n Encontré otras cartas más: \n%s" % list_rest(r_cards[1:])  # min(6, len(r_cards))
+    await dev_send(showing, ctx, response)
+
+
+@bot.command(name='d', help='Busca mazos públicos y privados en ArkhamDB')
+async def look_for_deck(ctx, code: str):
+    link = 'https://es.arkhamdb.com/api/public/deck/%s' % code
+    req = requests.get(link)
+    if req.url != link:
+        link = 'https://es.arkhamdb.com/api/public/decklist/%s' % code
+        req = requests.get(link)
+        if req.url != link:
+            response = "Mazo no encontrado :c"
+            await dev_send(showing, ctx, response)
+
+    deck_info = format_deck_cards(req.json(), ah_all_cards)
+    response = format_deck(req.json(), deck_info)
 
     await dev_send(showing, ctx, response)
 
 
-@bot.command(name='d', help='Busca cartas de Jugador y de Investigador en ArkhamDB')
-async def look_for_deck(ctx, code: str):
-    req = requests.get('https://es.arkhamdb.com/api/public/decklist/%s' % code).json()
-    if req == {}:
-        response = "El Mazo que buscas no existe :c"
-    else:
-        deck_info = format_deck_cards(req, ah_all_cards)
-        response = format_deck(req, deck_info)
+@bot.command(name='e', help='Busca cartas de encuentros')
+async def look_for_encounter(ctx, code: str):
+    response = "En construcción"
 
     await dev_send(showing, ctx, response)
 

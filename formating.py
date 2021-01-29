@@ -9,8 +9,9 @@ Casos borde locos que tienes que ver siempre:
 """
 
 # Esto es para que se vea bonito en el server de ¡Tengo un Plan!
-from functools import reduce
+import re
 
+import unidecode
 
 def format_deck(deck, info):
     formater = {"name": "**%s**" % deck['name'],
@@ -45,6 +46,27 @@ def make_string(array):
     return qty, text
 
 
+def list_rest(array):
+    text = ""
+    for c in array:
+        if c['type_code'] == "investigator":
+            text += "%s \n" % format_inv_card_f_short(c)
+        else:
+            text += "%s \n" % format_player_card_short(c, 1)[1:]
+    return text
+
+
+def hits_in_string(s1, s2):
+    hits = 0
+    for w1 in s1.lower().split():
+        for w2 in s2.lower().split():
+            w1_c = re.sub(r'[^a-z]', '', unidecode.unidecode(w1))
+            w2_c = re.sub(r'[^a-z]', '', unidecode.unidecode(w2))
+            if w1_c == w2_c:
+                hits += 1
+    return hits
+
+
 def format_deck_cards(deck, cards):
     info = {"assets": [], "events": [], "skills": [], "treachery": [], "permanents": [], "xp": 0}
     for c_id, qty in deck['slots'].items():
@@ -71,27 +93,28 @@ def format_deck_cards(deck, cards):
     return info
 
 
+
 def format_player_card_short(c, qty):
     formater = {"name": "%s" % c['name'],
                 "level": "%s" % format_xp(c),
                 "class": faction_order[c['faction_code']] + format_faction(c),
-                "quantity": str(qty),
+                "quantity": "x%s" % str(qty) if qty > 1 else "",
                 "subname": ": __%s__" % c['subname'] if "subname" in c else ""
                 }
-    text = "%(class)s %(name)s%(level)s x%(quantity)s" % formater
+    text = "%(class)s %(name)s%(level)s%(subname)s %(quantity)s" % formater
     return text
 
 
 def format_player_card(c):
     formater = {"name": "*%s" % c['name'] if c['is_unique'] else "%s" % c['name'],
                 "level": format_xp(c),
-                "subtext": "_-%s-_" % c['subtext'] if 'subtext' in c else "",
+                "subtext": " _-%s-_" % c['subname'] if 'subname' in c else "",
                 "faction": format_faction(c),
                 "type": "__%s__" % c['type_name'],
                 "traits": "*%s* " % c['traits'],
                 "icons": "Íconos de Habilidad: %s\n" % format_skill_icons(c) if format_skill_icons(c) != "" else "",
                 "costs": "Coste: %s \n" % c['cost'] if "cost" in c else "",
-                "text": "> %s " % format_card_text(c['text']),
+                "text": "> %s \n" % format_card_text(c['text']),
                 "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
                 "artist": ":paintbrush: %s" % c['illustrator'],
                 "pack": "%s #%s" % (c['pack_name'], str(c['position'])),
@@ -99,7 +122,7 @@ def format_player_card(c):
                                               ":Cordura: %s" % c['sanity'] if "sanity" in c else "")}
 
     text = "¡Carta de Jugador Encontrada!: \n" \
-           "%(name)s %(level)s %(subtext)s\n" \
+           "%(name)s%(subtext)s%(level)s\n" \
            "%(type)s %(faction)s \n" \
            "%(traits)s \n" \
            "%(costs)s" \
@@ -112,6 +135,14 @@ def format_player_card(c):
 
     return text
 
+def format_inv_card_f_short(c):
+    formater = {"class": format_card_text("[%s]" % c['faction_code']),
+                "name": "**%s**" % c['name'],
+                "skills": format_skill_icons_2(c),
+                "health_sanity": "%s%s" % (":Salud: %s " % c['health'], ":Cordura: %s" % c['sanity']),
+                }
+    text = "%(class)s %(name)s [%(skills)s] [%(health_sanity)s]" % formater
+    return text
 
 def format_inv_card_f(c):
     formater = {"class": format_card_text("[%s]" % c['faction_code']),
@@ -155,10 +186,10 @@ def format_skill_icons(c):
 
 def format_skill_icons_2(c):
     formater = {
-        "will": ":Voluntad:: %s " % c['skill_willpower'] if "skill_willpower" in c else "",
-        "int": ":Intelecto:: %s " % c['skill_intellect'] if "skill_intellect" in c else "",
-        "com": ":Combate:: %s " % c['skill_combat'] if "skill_combat" in c else "",
-        "agi": ":Agilidad:: %s" % c['skill_agility'] if "skill_agility" in c else "",
+        "will": ":Voluntad: %s " % c['skill_willpower'] if "skill_willpower" in c else "",
+        "int": ":Intelecto: %s " % c['skill_intellect'] if "skill_intellect" in c else "",
+        "com": ":Combate: %s " % c['skill_combat'] if "skill_combat" in c else "",
+        "agi": ":Agilidad: %s" % c['skill_agility'] if "skill_agility" in c else "",
     }
     return "%(will)s%(int)s%(com)s%(agi)s" % formater
 
@@ -174,7 +205,7 @@ def format_xp(c):
         if c['xp'] == 0:
             text = ""
         elif c['exceptional']:
-            text = " [%s]" % c['xp'] * 2
+            text = " [%s]" % (c['xp'] * 2)
         else:
             text = " [%s]" % c['xp']
     else:
@@ -193,6 +224,7 @@ def calculate_xp(c, qty):
             return c['xp'] * qty
     else:
         return 0
+
 
 text_format = {"[free]": ":Libre:",
                "[elder_sign]": ":arcano:",
@@ -216,6 +248,7 @@ text_format = {"[free]": ":Libre:",
                "[rogue]": ":Rebelde:",
                "[survivor]": ":Superviviente:",
                "[neutral]": ":Neutral:",
+               "[mythos]": ":plan:",
                "</b>": "**",
                "<b>": "**",
                "[[": "***",
@@ -230,4 +263,26 @@ faction_order = {
     "mystic": "3",
     "survivor": "4",
     "neutral": "5",
+    "mythos": "6",
 }
+
+
+def filter_by_level(card, lvl):
+    if 'xp' in card:
+        return card['xp'] == lvl
+    else:
+        return 0 == lvl
+
+
+def filter_by_subtext(card, sub):
+    if "subname" in card:
+        return hits_in_string(card['subname'], sub) > 0
+    else:
+        return False
+
+def find_and_extract(string, start_s, end_s):
+    fst_occ = string.find(start_s) + 1
+    snd_occ = string[fst_occ:].find(end_s)
+    extract = string[fst_occ: fst_occ + snd_occ]
+    base = string.replace("%s%s%s)" % (start_s, extract, end_s), "", 1)
+    return (base, extract)
