@@ -29,9 +29,6 @@ async def on_ready():
 @bot.command(name='j', help='Busca cartas de Jugador y de Investigador en ArkhamDB')
 async def look_for_player_card(ctx):
 
-    # TODO: Pedir con subtexto (para las versiones distintas de cartas)
-    # TODO: Pedir por nivel
-
     query = ' '.join(ctx.message.content.split()[1:])
     lvl_mode = False
     lvl_query = ""
@@ -99,6 +96,5 @@ async def dev_send(debug, ctx, string):
         await ctx.send("```%s```" % string)
     else:
         await ctx.send(string)
-
 
 bot.run(TOKEN)

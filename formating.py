@@ -13,6 +13,7 @@ import re
 
 import unidecode
 
+
 def format_deck(deck, info):
     formater = {"name": "**%s**" % deck['name'],
                 "investigator": "_Mazo para %s_" % deck['investigator_name'],
@@ -93,7 +94,6 @@ def format_deck_cards(deck, cards):
     return info
 
 
-
 def format_player_card_short(c, qty):
     formater = {"name": "%s" % c['name'],
                 "level": "%s" % format_xp(c),
@@ -135,6 +135,7 @@ def format_player_card(c):
 
     return text
 
+
 def format_inv_card_f_short(c):
     formater = {"class": format_card_text("[%s]" % c['faction_code']),
                 "name": "**%s**" % c['name'],
@@ -143,6 +144,7 @@ def format_inv_card_f_short(c):
                 }
     text = "%(class)s %(name)s [%(skills)s] [%(health_sanity)s]" % formater
     return text
+
 
 def format_inv_card_f(c):
     formater = {"class": format_card_text("[%s]" % c['faction_code']),
@@ -280,9 +282,10 @@ def filter_by_subtext(card, sub):
     else:
         return False
 
+
 def find_and_extract(string, start_s, end_s):
     fst_occ = string.find(start_s) + 1
     snd_occ = string[fst_occ:].find(end_s)
     extract = string[fst_occ: fst_occ + snd_occ]
     base = string.replace("%s%s%s)" % (start_s, extract, end_s), "", 1)
-    return (base, extract)
+    return base, extract
