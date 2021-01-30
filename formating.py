@@ -22,7 +22,8 @@ def format_deck(deck, info):
                 "permanents": "__Permanentes:__ (%s) %s \n" % make_string(info['permanents']) if len(
                     info['permanents']) > 0 else "",
                 "events": "__Eventos:__ (%s) %s \n" % make_string(info['events']) if len(info['events']) > 0 else "",
-                "skills": "__Habilidades:__ (%s) %s \n" % make_string(info['skills']) if len(info['skills']) > 0 else "",
+                "skills": "__Habilidades:__ (%s) %s \n" % make_string(info['skills']) if len(
+                    info['skills']) > 0 else "",
                 "treachery": "__Traiciones/Enemigos__: (%s) %s \n" % make_string(info['treachery']) if len(
                     info['treachery']) > 0 else "",
                 }
@@ -51,9 +52,9 @@ def list_rest(array):
     text = ""
     for c in array:
         if c['type_code'] == "investigator":
-            text += "%s \n" % format_inv_card_f_short(c)
+            text += "- %s \n" % format_inv_card_f_short(c)
         else:
-            text += "%s \n" % format_player_card_short(c, 1)[1:]
+            text += "- %s \n" % format_player_card_short(c, 1)[1:]
     return text
 
 
@@ -119,7 +120,7 @@ def format_player_card(c):
                 "artist": ":paintbrush: %s" % c['illustrator'],
                 "pack": "%s #%s" % (c['pack_name'], str(c['position'])),
                 "health_sanity": "%s%s\n" % (":Salud: %s " % c['health'] if "health" in c else "",
-                                              ":Cordura: %s" % c['sanity'] if "sanity" in c else "")}
+                                             ":Cordura: %s" % c['sanity'] if "sanity" in c else "")}
 
     text = "¡Carta de Jugador Encontrada!: \n" \
            "%(name)s%(subtext)s%(level)s\n" \
@@ -134,6 +135,66 @@ def format_player_card(c):
            "%(pack)s" % formater
 
     return text
+
+
+def format_enemy_card(c):
+    formater = {"name": "*%s" % c['name'] if c['is_unique'] else "%s" % c['name'],
+                "subtext": " _-%s-_" % c['subname'] if 'subname' in c else "",
+                "faction": format_faction(c),
+                "type": "__%s__" % c['type_name'],
+                "traits": "*%s* " % c['traits'],
+                "text": "> %s \n" % format_card_text(c['text']),
+                "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
+                "artist": ":paintbrush: %s" % c['illustrator'],
+                "pack": "%s #%s" % (c['pack_name'], str(c['position'])),
+                "stats": "%s%s%s\n" % (":Salud: %s%s " % (c['health'] if "health" in c else "-",
+                                                         ":Porinvestigador:" if c["health_per_investigator"] else ""),
+                                       ":Combate: %s " % (c['enemy_fight'] if "enemy_fight" in c else "-"),
+                                       ":Agilidad: %s" % (c['enemy_evade'] if "enemy_evade" in c else "-")),
+                "attack": "Ataque: %s\n" % format_attack(c) if format_attack(c) != "" else ""}
+
+    text = "¡Carta de Enemigo Encontrado!: \n" \
+           "%(name)s%(subtext)s\n" \
+           "%(type)s %(faction)s \n" \
+           "%(traits)s \n" \
+           "%(stats)s" \
+           "%(text)s" \
+           "%(flavour)s " \
+           "%(attack)s" \
+           "%(artist)s \n" \
+           "%(pack)s" % formater
+
+    return text
+
+
+def format_treachery_card(c):
+    formater = {"name": "*%s" % c['name'] if c['is_unique'] else "%s" % c['name'],
+                "faction": format_faction(c),
+                "type": "__%s__" % c['type_name'],
+                "traits": "*%s* " % c['traits'],
+                "text": "> %s \n" % format_card_text(c['text']),
+                "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
+                "artist": ":paintbrush: %s" % c['illustrator'],
+                "pack": "%s #%s" % (c['pack_name'], str(c['position']))}
+
+    text = "¡Carta de Enemigo Encontrado!: \n" \
+           "%(name)s\n" \
+           "%(type)s %(faction)s \n" \
+           "%(traits)s \n" \
+           "%(text)s" \
+           "%(flavour)s " \
+           "%(artist)s \n" \
+           "%(pack)s" % formater
+
+    return text
+
+
+def format_attack(c):
+    formater = {
+        "damage": ":Salud:" * c['enemy_damage'] if "enemy_damage" in c else "",
+        "horror": ":Cordura:" * c['enemy_horror'] if "enemy_horror" in c else "",
+    }
+    return "%(damage)s%(horror)s" % formater
 
 
 def format_inv_card_f_short(c):
@@ -207,9 +268,9 @@ def format_xp(c):
         if c['xp'] == 0:
             text = ""
         elif c['exceptional']:
-            text = " [%s]" % (c['xp'] * 2)
+            text = " (%sE)" % c['xp']
         else:
-            text = " [%s]" % c['xp']
+            text = " (%s)" % c['xp']
     else:
         text = ""
     return text
@@ -253,9 +314,11 @@ text_format = {"[free]": ":Libre:",
                "[mythos]": ":plan:",
                "</b>": "**",
                "<b>": "**",
+               "<em>": "__",
+               "</em>": "__",
                "[[": "***",
                "]]": "***",
-               "\n": "\n > ",
+               "\n": "\n> ",
                }
 
 faction_order = {
