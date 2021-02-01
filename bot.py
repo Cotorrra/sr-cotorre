@@ -18,12 +18,13 @@ ah_player = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=0')
 # Encounter cards include: Special player cards, Weaknesses, enemies, acts, plans, etc.
 ah_encounter = [c for c in ah_all_cards if "spoiler" in c]
 
-showing = True
+showing = False
 
 
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} está listo para usarse c:')
+
 
 
 @bot.command(name='j',
@@ -75,7 +76,7 @@ async def look_for_player_card(ctx):
             response = format_player_card(r_cards[0])
 
         if len(r_cards) > 1:
-            response += "\n Encontré otras cartas más: \n%s" % list_rest(r_cards[1:min(6, len(r_cards))])
+            response += "\n\n Encontré otras cartas más: \n%s" % list_rest(r_cards[1:min(4, len(r_cards))])
     await dev_send(showing, ctx, response)
 
 
@@ -96,11 +97,10 @@ async def look_for_deck(ctx, code: str):
     await dev_send(showing, ctx, response)
 
 
-@bot.command(name='e', help='Busca cartas de encuentros (En construcción)')
-async def look_for_encounter(ctx, code: str):
-    response = "En construcción"
-
-    await dev_send(showing, ctx, response)
+# @bot.command(name='e', help='Busca cartas de encuentros (En construcción)')
+# async def look_for_encounter(ctx, code: str):
+#    response = "En construcción"
+#    await dev_send(showing, ctx, response)
 
 
 async def dev_send(debug, ctx, string):
