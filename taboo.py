@@ -3,11 +3,13 @@ from formating import *
 
 current_taboo = "003"
 
+
 def load_taboo():
     with open('data/taboos.json') as taboo:
         info = list(json.load(taboo))
 
     for t in info:
+        t['cards'] = json.dumps(t['cards'])
         t['cards'] = json.loads(t['cards'])
 
     return info

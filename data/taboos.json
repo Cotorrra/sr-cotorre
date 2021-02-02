@@ -1,1 +1,235 @@
-[{"id":3,"code":"003","name":"Taboo List","active":1,"date_start":"2020-10-15","date_update":"2021-01-17","cards":"[{\"code\":\"01020\",\"xp\":1},{\"code\":\"01050\",\"xp\":2},{\"code\":\"02108\",\"xp\":2},{\"code\":\"02152\",\"xp\":1},{\"code\":\"02187\",\"xp\":3},{\"code\":\"02189\",\"xp\":3},{\"code\":\"02193\",\"xp\":1},{\"code\":\"02226\",\"xp\":-1},{\"code\":\"04305\",\"xp\":1},{\"code\":\"05153\",\"xp\":4},{\"code\":\"05159\",\"xp\":3},{\"code\":\"05231\",\"xp\":2},{\"code\":\"06021\",\"xp\":3},{\"code\":\"60233\",\"xp\":3},{\"code\":\"01033\",\"text\":\"This card\\u2019s [reaction] ability now reads: \\u201cAfter you successfully investigate, exhaust Dr. Milan Christopher...\\u201d\"},{\"code\":\"02002\",\"text\":\"This card\\u2019s [reaction] ability gains: \\u201c(Limit once per round.)\\u201d\"},{\"code\":\"02111\",\"text\":\"This card gains: \\u201cGroup limit 2 copies of Delve Too Deep in the victory display.\\u201d\"},{\"code\":\"02229\",\"text\":\"At the end of its ability, this card gains: \\u201c(max once per round).\\u201d\"},{\"code\":\"02266\",\"text\":\"This card gains: \\u201cMax once per round.\\u201d\"},{\"code\":\"03029\",\"text\":\"This card\\u2019s ability now reads: \\u201cPut a level 0-3 [[Item]] asset into play from your hand.\\u201d\"},{\"code\":\"03315\",\"exceptional\":1,\"text\":\"This card gains the Exceptional keyword.\"},{\"code\":\"04309\",\"text\":\"At the end of its ability, this card gains: \\u201cRemove All In from the game.\\u201d\"},{\"code\":\"05116\",\"text\":\"This card\\u2019s [action] ability is now a [fast] ability.\"},{\"code\":\"05188\",\"text\":\"This card\\u2019s [action] ability is now a [fast] ability.\"},{\"code\":\"05189\",\"text\":\"This card\\u2019s [action] ability is now a [fast] ability.\"},{\"code\":\"06195\",\"text\":\"This card\\u2019s [action] ability now reads: \\u201c[action] Spend 1 ammo: <b>Fight.<\\\/b> You get +2 [combat] for this attack. If a chaos token with a non-negative modifier is revealed during this attack, this attack deals +2 damage.\\u201d\"},{\"code\":\"02026\",\"deck_limit\":0,\"text\":\"Forbidden.\"}]"},{"id":2,"code":"002","name":"Taboo List","active":1,"date_start":"2019-09-27","date_update":"2019-09-30","cards":"[{\"code\":\"01020\",\"xp\":2},{\"code\":\"01050\",\"xp\":2},{\"code\":\"02026\",\"xp\":3},{\"code\":\"02152\",\"xp\":1},{\"code\":\"02187\",\"xp\":5},{\"code\":\"02189\",\"xp\":5},{\"code\":\"02193\",\"xp\":2},{\"code\":\"02226\",\"xp\":-1},{\"code\":\"05159\",\"xp\":3},{\"code\":\"01033\",\"text\":\"This card\\u2019s [reaction] ability now reads: \\u201cAfter you successfully investigate, exhaust Dr. Milan Christopher...\\u201d\"},{\"code\":\"02002\",\"text\":\"This card\\u2019s [reaction] ability gains: \\u201c(Limit once per round.)\\u201d\"},{\"code\":\"02111\",\"text\":\"This card gains: \\u201cGroup limit 2 copies of Delve Too Deep in the victory display.\\u201d\"},{\"code\":\"02229\",\"text\":\"This card gains: \\u201cMax 1 committed per skill test.\\u201d\"},{\"code\":\"02266\",\"text\":\"This card gains: \\u201cMax once per round.\\u201d\"},{\"code\":\"03029\",\"text\":\"This card\\u2019s ability now reads: \\u201cPut an [[Item]] asset that takes up fewer than 2 hand slots into play from your hand.\\u201d\"},{\"code\":\"03315\",\"exceptional\":1,\"text\":\"This card gains the Exceptional keyword.\"}]"},{"id":1,"code":"001","name":"Taboo List","active":1,"date_start":"2019-04-20","date_update":"2019-05-09","cards":"[{\"code\":\"01020\",\"xp\":2},{\"code\":\"01050\",\"xp\":2},{\"code\":\"02152\",\"xp\":1},{\"code\":\"02187\",\"xp\":5},{\"code\":\"02189\",\"xp\":5},{\"code\":\"02193\",\"xp\":2},{\"code\":\"01033\",\"text\":\"This card\\u2019s [reaction] ability now reads: \\u201cAfter you successfully investigate, exhaust Dr. Milan Christopher...\\u201d\"},{\"code\":\"02002\",\"text\":\"This card\\u2019s [reaction] ability gains: \\u201c(Limit once per round.)\\u201d\"},{\"code\":\"02111\",\"text\":\"This card gains: \\u201cGroup limit 2 copies of Delve Too Deep in the victory display.\\u201d\"},{\"code\":\"02229\",\"text\":\"This card gains: \\u201cMax 1 committed per skill test.\\u201d\"},{\"code\":\"02266\",\"text\":\"This card gains: \\u201cMax once per round.\\u201d\"},{\"code\":\"03029\",\"text\":\"This card\\u2019s ability now reads: \\u201cPut an [[Item]] asset that takes up fewer than 2 hand slots into play from your hand.\\u201d\"},{\"code\":\"03315\",\"exceptional\":1,\"text\":\"This card gains the Exceptional keyword.\"}]"}]
+[{"id":3,"code":"003","name":"Taboo List","active":1,"date_start":"2020-10-15","date_update":"2021-01-17","cards": [
+  {
+    "code": "01020",
+    "xp": 1
+  },
+  {
+    "code": "01050",
+    "xp": 2
+  },
+  {
+    "code": "02108",
+    "xp": 2
+  },
+  {
+    "code": "02152",
+    "xp": 1
+  },
+  {
+    "code": "02187",
+    "xp": 3
+  },
+  {
+    "code": "02189",
+    "xp": 3
+  },
+  {
+    "code": "02193",
+    "xp": 1
+  },
+  {
+    "code": "02226",
+    "xp": -1
+  },
+  {
+    "code": "04305",
+    "xp": 1
+  },
+  {
+    "code": "05153",
+    "xp": 4
+  },
+  {
+    "code": "05159",
+    "xp": 3
+  },
+  {
+    "code": "05231",
+    "xp": 2
+  },
+  {
+    "code": "06021",
+    "xp": 3
+  },
+  {
+    "code": "60233",
+    "xp": 3
+  },
+  {
+    "code": "01033",
+    "text": "La capacidad [reaction] de esta carta ahora dice: \u00abDespu\u00e9s de que investigues con \u00e9xito, agota Dr. Milan Christoher...\u00bb"
+  },
+  {
+    "code": "02002",
+    "text": "La capacidad [reaction] de esta carta obtiene: \u00abL\u00edmite una vez por ronda.\u00bb"
+  },
+  {
+    "code": "02111",
+    "text": "Esta carta obtiene: \u00abL\u00edmite de grupo 2 copias de Ahondar Demasiado en la zona de victoria.\u00bb"
+  },
+  {
+    "code": "02229",
+    "text": "Al final de esta prueba de habilidiad esta carta obtiene: \u00abL\u00edmite una vez por ronda.\u00bb"
+  },
+  {
+    "code": "02266",
+    "text": "Esta carta obtiene: \u00abM\u00e1ximo de una vez por ronda.\u00bb"
+  },
+  {
+    "code": "03029",
+    "text": "La capacidad de esta carta ahora dice: \u00abPon en juego un apoyo [[Objeto]] de nivel 0-3 desde tu mano.\u00bb"
+  },
+  {
+    "code": "03315",
+    "exceptional": 1,
+    "text": "Esta carta obtiene la palabra clave Excepcional."
+  },
+  {
+    "code": "04309",
+    "text": "Al final de esta prueba de habilidad esta obtiene: \u00abRetira No va m\u00e1s de la partida.\u00bb"
+  },
+  {
+    "code": "05116",
+    "text": "La capacidad [action] ahora es una capacidad [free]."
+  },
+  {
+    "code": "05188",
+    "text": "La capacidad [action] ahora es una capacidad [free]."
+  },
+  {
+    "code": "05189",
+    "text": "La capacidad [action] ahora es una capacidad [free]."
+  },
+  {
+    "code": "06195",
+    "text": "La capacidad [action] de esta carta ahora dice: \u00ab[action] Gasta 1 munici\u00f3n: \u003cb\u003eCombatir.\u003c\\/b\u003e Recibes +2 [combat] para este ataque. Si es revelada una ficha de caos que no contenga un modificador negativo durante este ataque, este ataque inflige +2 de da\u00f1o.\u00bb"
+  },
+  {
+    "code": "02026",
+    "deck_limit": 0,
+    "text": "Prohibida."
+  }
+]
+},{"id":2,"code":"002","name":"Taboo List","active":1,"date_start":"2019-09-27","date_update":"2019-09-30","cards": [
+  {
+    "code": "01020",
+    "xp": 2
+  },
+  {
+    "code": "01050",
+    "xp": 2
+  },
+  {
+    "code": "02026",
+    "xp": 3
+  },
+  {
+    "code": "02152",
+    "xp": 1
+  },
+  {
+    "code": "02187",
+    "xp": 5
+  },
+  {
+    "code": "02189",
+    "xp": 5
+  },
+  {
+    "code": "02193",
+    "xp": 2
+  },
+  {
+    "code": "02226",
+    "xp": -1
+  },
+  {
+    "code": "05159",
+    "xp": 3
+  },
+  {
+    "code": "01033",
+    "text": "This card\u0027s [reaction] ability now reads: \u00abAfter you successfully investigate, exhaust Dr. Milan Christopher...\u00bb"
+  },
+  {
+    "code": "02002",
+    "text": "This card\u0027s [reaction] ability gains: \u00ab(Limit once per round.)\u00bb"
+  },
+  {
+    "code": "02111",
+    "text": "This card gains: \u00abGroup limit 2 copies of Delve Too Deep in the victory display.\u00bb"
+  },
+  {
+    "code": "02229",
+    "text": "This card gains: \u00abMax 1 committed per skill test.\u00bb"
+  },
+  {
+    "code": "02266",
+    "text": "This card gains: \u00abMax once per round.\u00bb"
+  },
+  {
+    "code": "03029",
+    "text": "This card\u0027s ability now reads: \u00abPut an [[Item]] asset that takes up fewer than 2 hand slots into play from your hand.\u00bb"
+  },
+  {
+    "code": "03315",
+    "exceptional": 1,
+    "text": "This card gains the Exceptional keyword."
+  }
+]
+},{"id":1,"code":"001","name":"Taboo List","active":1,"date_start":"2019-04-20","date_update":"2019-05-09","cards": [
+  {
+    "code": "01020",
+    "xp": 2
+  },
+  {
+    "code": "01050",
+    "xp": 2
+  },
+  {
+    "code": "02152",
+    "xp": 1
+  },
+  {
+    "code": "02187",
+    "xp": 5
+  },
+  {
+    "code": "02189",
+    "xp": 5
+  },
+  {
+    "code": "02193",
+    "xp": 2
+  },
+  {
+    "code": "01033",
+    "text": "This card\u0027s [reaction] ability now reads: \u00abAfter you successfully investigate, exhaust Dr. Milan Christopher...\u00bb"
+  },
+  {
+    "code": "02002",
+    "text": "This card\u0027s [reaction] ability gains: \u00ab(Limit once per round.)\u00bb"
+  },
+  {
+    "code": "02111",
+    "text": "This card gains: \u00abGroup limit 2 copies of Delve Too Deep in the victory display.\u00bb"
+  },
+  {
+    "code": "02229",
+    "text": "This card gains: \u00abMax 1 committed per skill test.\u00bb"
+  },
+  {
+    "code": "02266",
+    "text": "This card gains: \u00abMax once per round.\u00bb"
+  },
+  {
+    "code": "03029",
+    "text": "This card\u0027s ability now reads: \u00abPut an [[Item]] asset that takes up fewer than 2 hand slots into play from your hand.\u00bb"
+  },
+  {
+    "code": "03315",
+    "exceptional": 1,
+    "text": "This card gains the Exceptional keyword."
+  }
+]
+}]
