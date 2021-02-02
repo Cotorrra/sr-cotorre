@@ -48,17 +48,13 @@ async def look_for_player_card(ctx):
         query = query.replace("~%s~" % sub_query, "", 1)
         (query, sub_query) = find_and_extract(query, "~", "~")
 
-    r_cards = sorted([c for c in ah_player if hits_in_string(c['name'], query) > 0],
-                     key=lambda card: -hits_in_string(card['name'], query))
-
-    # Sales en los resultados aparte si estas igual de hits con las palabras
-    r_cards = [c for c in r_cards if hits_in_string(c['name'], query) == hits_in_string(r_cards[0]['name'], query)]
+    r_cards = search(query, ah_player)
 
     if sub_text_mode:
         r_cards = [c for c in r_cards if filter_by_subtext(c, sub_query)]
 
     if keyword_mode:
-        r_cards = [c for c in r_cards if filter_by_level(c, int(keyword_query))]
+        r_cards = use_keywords(r_cards, keyword_query)
 
     if len(r_cards) == 0:
         response = "No encontré ninguna carta"

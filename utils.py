@@ -1,7 +1,42 @@
 import re
 import unidecode
 
-# def search(query, ):
+
+def search(query, cards):
+    r_cards = sorted([c for c in cards if hits_in_string(c['name'], query) > 0],
+                     key=lambda card: -hits_in_string(card['name'], query))
+
+    # Sales en los resultados aparte si estas igual de hits con las palabras
+    r_cards = [c for c in r_cards if hits_in_string(c['name'], query) == hits_in_string(r_cards[0]['name'], query)]
+    return r_cards
+
+
+def use_keywords(cards, key_list):
+    filtered_cards = cards
+    for char in key_list.lower():
+        if char.isdigit():
+            filtered_cards = [c for c in filtered_cards if filter_by_level(c, int(char))]
+        if char == "e":
+            filtered_cards = [c for c in filtered_cards if c['exceptional']]
+        if char == "b":
+            filtered_cards = [c for c in filtered_cards if c['faction_code'] == 'seeker']
+        if char == "g":
+            filtered_cards = [c for c in filtered_cards if c['faction_code'] == 'guardian']
+        if char == "r":
+            filtered_cards = [c for c in filtered_cards if c['faction_code'] == 'rogue']
+        if char == "s":
+            filtered_cards = [c for c in filtered_cards if c['faction_code'] == 'survivor']
+        if char == "m":
+            filtered_cards = [c for c in filtered_cards if c['faction_code'] == 'mystic']
+        if char == "n":
+            filtered_cards = [c for c in filtered_cards if c['faction_code'] == 'neutral']
+        if char == "u":
+            filtered_cards = [c for c in filtered_cards if c['unique']]
+        if char == "p":
+            filtered_cards = [c for c in filtered_cards if c['permanent']]
+
+    return filtered_cards
+
 
 
 def filter_by_level(card, lvl):

@@ -96,8 +96,15 @@ def format_player_card_short(c, qty):
 
 
 def format_health_sanity(c):
-    return format_card_text("%s%s" % ("[health] %s " % c['health'] if "health" in c else "",
-                                      "[sanity] %s" % c['sanity'] if "sanity" in c else ""))
+    return format_card_text("%s%s" % ("[health] %s " % format_number(c['health']) if "health" in c else "",
+                                      "[sanity] %s" % format_number(c['sanity']) if "sanity" in c else ""))
+
+
+def format_number(n):
+    if int(n) == -2:
+        return "X"
+    else:
+        return str(n)
 
 
 def format_player_card(c):
@@ -108,7 +115,7 @@ def format_player_card(c):
                 "type": "__%s__" % c['type_name'],
                 "traits": "*%s* " % c['traits'],
                 "icons": "Iconos de Habilidad: %s\n" % format_skill_icons(c) if format_skill_icons(c) != "" else "",
-                "costs": "Coste: %s \n" % c['cost'] if "cost" in c else "",
+                "costs": "Coste: %s \n" % format_number(c['cost']) if "cost" in c else "",
                 "text": "> %s \n" % format_card_text(c['text']),
                 "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
                 "artist": ":paintbrush: %s" % c['illustrator'],
@@ -133,6 +140,17 @@ def format_player_card(c):
     return text
 
 
+def format_enemy_stats(c):
+    formater = {"health": "[health] %s%s " % (format_number(c['health']) if "health" in c else "-",
+                                              "[per_investigator]" if c[
+                                                  "health_per_investigator"] else ""),
+                "combat": "[combat] %s " % (format_number(c['enemy_fight']) if "enemy_fight" in c else "-"),
+                "agility": "[agility] %s" % (format_number(c['enemy_evade']) if "enemy_evade" in c else "-")
+                }
+
+    return format_card_text("%(health)s%(combat)s%(agility)s\n" % formater)
+
+
 def format_enemy_card(c):
     formater = {"name": "*%s" % c['name'] if c['is_unique'] else "%s" % c['name'],
                 "subtext": " _-%s-_" % c['subname'] if 'subname' in c else "",
@@ -143,13 +161,7 @@ def format_enemy_card(c):
                 "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
                 "artist": ":paintbrush: %s" % c['illustrator'],
                 "pack": "%s #%s" % (c['pack_name'], str(c['position'])),
-                "stats": format_card_text("%s%s%s\n" % ("[health] %s%s " % (c['health'] if "health" in c else "-",
-                                                                            "[per_investigator]" if c[
-                                                                                "health_per_investigator"] else ""),
-                                                        "[combat] %s " % (
-                                                            c['enemy_fight'] if "enemy_fight" in c else "-"),
-                                                        "[agility] %s" % (
-                                                            c['enemy_evade'] if "enemy_evade" in c else "-"))),
+                "stats": format_enemy_stats(c),
                 "attack": "Ataque: %s\n" % format_attack(c) if format_attack(c) != "" else ""}
 
     text = "¡Carta de Enemigo Encontrada!: \n\n" \
