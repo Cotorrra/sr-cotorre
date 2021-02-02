@@ -1,11 +1,10 @@
-import json
 import os
-import random
 
 from discord.ext import commands
 from dotenv import load_dotenv
 import requests
 from formating import *
+from utils import *
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -20,11 +19,13 @@ ah_encounter = [c for c in ah_all_cards if "spoiler" in c]
 
 showing = False
 
-
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} está listo para usarse c:')
 
+
+# @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
+# async def look_for_taboo(ctx):
 
 
 @bot.command(name='j',
@@ -33,14 +34,14 @@ async def on_ready():
 async def look_for_player_card(ctx):
 
     query = ' '.join(ctx.message.content.split()[1:])
-    lvl_mode = False
-    lvl_query = ""
+    keyword_mode = False
+    keyword_query = ""
     sub_text_mode = False
     sub_query = ""
 
     if query.__contains__("(") and query.__contains__(")"):
-        lvl_mode = True
-        (query, lvl_query) = find_and_extract(query, "(", ")")
+        keyword_mode = True
+        (query, keyword_query) = find_and_extract(query, "(", ")")
 
     if query.find("~") >= 0:
         sub_text_mode = True
@@ -56,8 +57,8 @@ async def look_for_player_card(ctx):
     if sub_text_mode:
         r_cards = [c for c in r_cards if filter_by_subtext(c, sub_query)]
 
-    if lvl_mode:
-        r_cards = [c for c in r_cards if filter_by_level(c, int(lvl_query))]
+    if keyword_mode:
+        r_cards = [c for c in r_cards if filter_by_level(c, int(keyword_query))]
 
     if len(r_cards) == 0:
         response = "No encontré ninguna carta"

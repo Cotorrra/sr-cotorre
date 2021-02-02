@@ -9,9 +9,8 @@ Casos borde locos que tienes que ver siempre:
 """
 
 # Esto es para que se vea bonito en el server de ¡Tengo un Plan!
-import re
 
-import unidecode
+from taboo import *
 
 
 def format_deck(deck, info):
@@ -58,23 +57,14 @@ def list_rest(array):
     return text
 
 
-def hits_in_string(s1, s2):
-    hits = 0
-    for w1 in list(set(s1.lower().split())):
-        for w2 in list(set(s2.lower().split())):
-            w1_c = re.sub(r'[^a-z]', '', unidecode.unidecode(w1))
-            w2_c = re.sub(r'[^a-z]', '', unidecode.unidecode(w2))
-            if w1_c == w2_c:
-                hits += 1
-    return hits
-
 
 def format_deck_cards(deck, cards):
     info = {"assets": [], "events": [], "skills": [], "treachery": [], "permanents": [], "xp": 0}
     for c_id, qty in deck['slots'].items():
         card = [c for c in cards if c['code'] == c_id][0]
         text = format_player_card_short(card, qty)
-        info["xp"] += calculate_xp(card, qty)
+        taboo_version = "00"+str(deck['taboo_id'])
+        info["xp"] += calculate_xp(card, qty, taboo_version)
 
         if card['permanent']:
             info['permanents'].append(text)
@@ -119,8 +109,10 @@ def format_player_card(c):
                 "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
                 "artist": ":paintbrush: %s" % c['illustrator'],
                 "pack": "%s #%s" % (c['pack_name'], str(c['position'])),
-                "health_sanity": format_card_text("%s%s" % ("[health] %s " % c['health'] if "health" in c else "",
-                                                            "[sanity] %s" % c['sanity'] if "sanity" in c else ""))}
+                "health_sanity": format_card_text("%s%s\n" % ("[health] %s " % c['health'] if "health" in c else "",
+                                                            "[sanity] %s" % c['sanity'] if "sanity" in c else "")),
+                "taboo_text": format_taboo_text(c['code'])
+                }
 
     text = "¡Carta de Jugador Encontrada!: \n\n" \
            "%(name)s%(subtext)s%(level)s\n" \
@@ -131,6 +123,7 @@ def format_player_card(c):
            "%(text)s" \
            "%(flavour)s " \
            "%(health_sanity)s \n" \
+           "%(taboo_text)s" \
            "%(artist)s \n" \
            "%(pack)s" % formater
 
@@ -174,7 +167,7 @@ def format_treachery_card(c):
     formater = {"name": "*%s" % c['name'] if c['is_unique'] else "%s" % c['name'],
                 "faction": format_faction(c),
                 "type": "__%s__" % c['type_name'],
-                "traits": "*%s* " % c['traits'],
+                "traits": "*%s*" % c['traits'],
                 "text": "> %s \n" % format_card_text(c['text']),
                 "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
                 "artist": ":paintbrush: %s" % c['illustrator'],
@@ -220,6 +213,7 @@ def format_inv_card_f(c):
                 "artist": ":paintbrush: %s" % c['illustrator'],
                 "pack": "%s #%s" % (c['pack_name'], str(c['position'])),
                 "traits": "***%s***" % c['traits'],
+                "taboo_text": format_taboo_text(c['code'])
                 }
     text = "¡Carta de investigador Encontrada!: \n\n" \
            "%(class)s %(name)s %(subname)s \n" \
@@ -227,6 +221,7 @@ def format_inv_card_f(c):
            "%(skills)s \n" \
            "%(ability)s \n" \
            "%(health_sanity)s \n" \
+           "%(taboo_text)s" \
            "%(artist)s \n" \
            "%(pack)s" % formater
     return text
@@ -279,17 +274,22 @@ def format_xp(c):
     return text
 
 
-def calculate_xp(c, qty):
+def calculate_xp(c, qty, taboo_ver=current_taboo):
+    chain = 0
+    if is_in_taboo(c['code'], taboo_ver):
+        if 'xp' in get_tabooed_card(c['code'], taboo_ver):
+            chain = get_tabooed_card(c['code'], taboo_ver)['xp']
+
     if "xp" in c:
         if c['myriad']:
-            return c['xp']
+            return c['xp'] + chain
         elif c['exceptional']:
             # Aunque debería haber 1 en el mazo...
-            return c['xp'] * 2 * qty
+            return (c['xp'] + chain) * 2 * qty
         else:
-            return c['xp'] * qty
+            return (c['xp'] + chain) * qty
     else:
-        return 0
+        return chain * qty
 
 
 text_format = {"[free]": "<:Libre:789610643262799913>",
@@ -338,23 +338,21 @@ faction_order = {
 }
 
 
-def filter_by_level(card, lvl):
-    if 'xp' in card:
-        return card['xp'] == lvl
+
+
+
+def format_taboo_text(card_id, version=current_taboo):
+    text = "Tabú más reciente: \n"
+    if is_in_taboo(card_id, version):
+        card = get_tabooed_card(card_id, version)
+        if 'xp' in card:
+            if card['xp'] >= 0:
+                text += "> Encadenada: +%d de experiencia \n" % card['xp']
+            else:
+                text += "> Desencadenada: -%d de experiencia \n" % card['xp']
+        if 'text' in card:
+            text += "> %s \n" % format_card_text(card['text'])
+        return text
     else:
-        return 0 == lvl
+        return ""
 
-
-def filter_by_subtext(card, sub):
-    if "subname" in card:
-        return hits_in_string(card['subname'], sub) > 0
-    else:
-        return False
-
-
-def find_and_extract(string, start_s, end_s):
-    fst_occ = string.find(start_s) + 1
-    snd_occ = string[fst_occ:].find(end_s)
-    extract = string[fst_occ: fst_occ + snd_occ]
-    base = string.replace("%s%s%s)" % (start_s, extract, end_s), "", 1)
-    return base, extract
