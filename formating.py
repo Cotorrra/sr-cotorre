@@ -152,12 +152,12 @@ def format_enemy_stats(c):
 
 
 def format_enemy_card(c):
-    formater = {"name": "*%s" % c['name'] if c['is_unique'] else "%s" % c['name'],
+    formater = {"name": "***%s**" % c['name'] if c['is_unique'] else "**%s**" % c['name'],
                 "subtext": " _-%s-_" % c['subname'] if 'subname' in c else "",
                 "faction": format_faction(c),
                 "type": "__%s__" % c['type_name'],
                 "traits": "*%s* " % c['traits'],
-                "text": "> %s \n" % format_card_text(c['text']),
+                "text": "%s \n" % format_card_text(c['text']),
                 "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
                 "artist": ":paintbrush: %s" % c['illustrator'],
                 "pack": "%s #%s" % (c['pack_name'], str(c['position'])),
@@ -172,7 +172,7 @@ def format_enemy_card(c):
            "%(text)s" \
            "%(flavour)s " \
            "%(attack)s" \
-           "%(artist)s \n" \
+           "\n %(artist)s \n" \
            "%(pack)s" % formater
 
     return text
@@ -337,6 +337,8 @@ text_format = {"[free]": "<:Libre:789610643262799913>",
                "<b>": "**",
                "<em>": "__",
                "</em>": "__",
+               "<i>": "_",
+               "</i>": "_",
                "[[": "***",
                "]]": "***",
                "\n": "\n> ",
