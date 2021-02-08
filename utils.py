@@ -1,5 +1,6 @@
 import re
 import unidecode
+from formating.formating import *
 
 
 def search(query: str, cards: list):
