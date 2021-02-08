@@ -137,6 +137,9 @@ async def look_for_encounter(ctx, code: str):
 
         else:
             response = format_player_card(r_cards[0])
+
+        if len(r_cards) > 1:
+            response += "\n\n Encontré otras cartas más: \n%s" % list_rest(r_cards[1:min(4, len(r_cards))])
     await dev_send(showing, ctx, response)
 
 
