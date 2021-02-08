@@ -43,13 +43,15 @@ async def look_for_player_card(ctx):
     query = ' '.join(ctx.message.content.split()[1:])
     query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
     query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
-    r_cards = search(query, ah_player)
+    r_cards = ah_player.copy()
 
     if sub_text_mode:
         r_cards = [c for c in r_cards if filter_by_subtext(c, sub_query)]
 
     if keyword_mode:
         r_cards = use_pc_keywords(r_cards, keyword_query)
+
+    r_cards = search(query, r_cards)
 
     if len(r_cards) == 0:
         response = "No encontré ninguna carta"
@@ -98,11 +100,13 @@ async def look_for_encounter(ctx, code: str):
     query = ' '.join(ctx.message.content.split()[1:])
     query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
     query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
-    r_cards = search(query, ah_encounter)
+    r_cards = ah_encounter.copy()
     if sub_text_mode:
         r_cards = [c for c in r_cards if filter_by_subtext_ec(c, sub_query)]
     if keyword_mode:
         r_cards = use_ec_keywords(r_cards, keyword_query)
+
+    r_cards = search(query, r_cards)
 
     if len(r_cards) == 0:
         response = "No encontré ninguna carta"
