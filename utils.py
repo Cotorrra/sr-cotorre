@@ -10,8 +10,7 @@ def search(query: str, cards: list):
     :param cards: Cartas
     :return:
     """
-    r_cards = sorted([c for c in cards if hits_in_string(c['name'], query) >= 0],
-                     key=lambda card: -hits_in_string(card['name'], query))
+    r_cards = sorted(cards, key=lambda card: -hits_in_string(card['name'], query))
 
     # Sales en los resultados aparte si estas igual de hits con las palabras
     r_cards = [c for c in r_cards if hits_in_string(c['name'], query) == hits_in_string(r_cards[0]['name'], query)]
@@ -136,8 +135,8 @@ def hits_in_string(s1: str, s2: str):
     hits = 0
     for w1 in list(set(s1.lower().split())):
         for w2 in list(set(s2.lower().split())):
-            w1_c = re.sub(r'[^a-z]', '', unidecode.unidecode(w1))
-            w2_c = re.sub(r'[^a-z]', '', unidecode.unidecode(w2))
+            w1_c = re.sub(r'[^a-z0-9]', '', unidecode.unidecode(w1))
+            w2_c = re.sub(r'[^a-z0-9]', '', unidecode.unidecode(w2))
             if w1_c == w2_c:
                 hits += 1
     return hits
