@@ -30,14 +30,13 @@ async def on_ready():
 
 @bot.command(name='halp')
 async def send_help(ctx):
-    response = "¿Necesitas ayuda?: " \ 
+    response = "¿Necesitas ayuda?: " \
                "\n !ahd [numero] Busca en ArkhamDB el mazo dado y lo muestra, tanto públicos como privados.\n" \
                "!ahj [nombre] ~[subtitulo]~ ([extra]) Busca cartas en ArkhamDB.\n" \
                "[extra] puede contener ser lo siguiente: '0-5' nivel de la carta, " \
                "'G/B/R/M/S/N' la clase de la carta, P para permanente, U para único, E para excepcional.\n" \
                "!ahm [nombre] ~[subtitulo]~ busca cartas de encuentros (lugares, actos, escenarios, etc.) que no " \
-               "sean cartas de jugador estándar. \n" \
- \
+               "sean cartas de jugador estándar. \n"
     await ctx.send(response)
 
 
