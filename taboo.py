@@ -1,5 +1,5 @@
 import json
-from formating import *
+from formating.formating import *
 
 current_taboo = "003"
 

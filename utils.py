@@ -2,7 +2,7 @@ import re
 import unidecode
 
 
-def search(query: str, cards: dict):
+def search(query: str, cards: list):
     """
     Realiza una búsqueda según un grupo de palabras dentro del nombre (atributo 'name') de cada carta.
     :param query: Texto para buscar
@@ -140,3 +140,4 @@ def hits_in_string(s1: str, s2: str):
             if w1_c == w2_c:
                 hits += 1
     return hits
+
