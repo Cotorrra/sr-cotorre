@@ -1,2 +1,2 @@
-# sr-cotorre
-Bot de Discord inspirado en el Mr. Rook, busca cartas en Arkhamdb.com.
+# Sr. "Cotorre"
+Bot de Discord inspirado en el Mr. "Rook", un bot que busca cartas en Arkhamdb.com.
