@@ -8,7 +8,7 @@ from utils import *
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-bot = commands.Bot(command_prefix='!ah')
+bot = commands.Bot(command_prefix='!a')
 
 ah_all_cards = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=1').json()
 
@@ -28,7 +28,7 @@ async def on_ready():
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
 # async def look_for_taboo(ctx):
 
-@bot.command(name='halp')
+@bot.command(name='hhelp')
 async def send_help(ctx):
     response = "¿Necesitas ayuda?: " \
                "\n !ahd [numero] Busca en ArkhamDB el mazo dado y lo muestra, tanto públicos como privados.\n" \
@@ -40,7 +40,7 @@ async def send_help(ctx):
     await ctx.send(response)
 
 
-@bot.command(name='j')
+@bot.command(name='hj')
 async def look_for_player_card(ctx):
     skip = False
     query = ' '.join(ctx.message.content.split()[1:])
@@ -80,7 +80,7 @@ async def look_for_player_card(ctx):
     await dev_send(showing, ctx, response)
 
 
-@bot.command(name='d')
+@bot.command(name='hd')
 async def look_for_deck(ctx, code: str):
     link = 'https://es.arkhamdb.com/api/public/deck/%s' % code
     req = requests.get(link)
@@ -98,7 +98,7 @@ async def look_for_deck(ctx, code: str):
 
 
 # TODO: Armar los format_x...+
-@bot.command(name='m')
+@bot.command(name='hm')
 async def look_for_encounter(ctx, code: str):
     query = ' '.join(ctx.message.content.split()[1:])
     query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
