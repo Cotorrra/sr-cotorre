@@ -2,6 +2,8 @@
 *.env
 __pycache__
 testing.py
+chaos_bag.py
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -141,4 +143,3 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-chaos_bag.py
