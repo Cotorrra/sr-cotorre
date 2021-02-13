@@ -17,7 +17,7 @@ def search(query: str, cards: list):
     return r_cards
 
 
-def use_pc_keywords(cards: dict, key_list: str):
+def use_pc_keywords(cards: list, key_list: str):
     """
     Filtra cartas de jugador según los caracteres del string dado
     :param cards: Lista de cartas
@@ -53,7 +53,7 @@ def use_pc_keywords(cards: dict, key_list: str):
     return filtered_cards
 
 
-def use_ec_keywords(cards: dict, key_list: str):
+def use_ec_keywords(cards: list, key_list: str):
     """
     Filtra cartas de encuentro según los caracteres del string dado
     :param cards: Lista de cartas

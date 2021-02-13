@@ -56,7 +56,7 @@ async def look_for_player_card(ctx):
 
     r_cards = search(query, r_cards)
 
-    if len(r_cards) == 0:
+    if len(r_cards) == 0 or len(r_cards) == len(ah_player):
         response = "No encontré ninguna carta"
 
     else:
@@ -111,7 +111,7 @@ async def look_for_encounter(ctx, code: str):
 
     r_cards = search(query, r_cards)
 
-    if len(r_cards) == 0:
+    if len(r_cards) == 0 or len(r_cards) == len(ah_encounter):
         response = "No encontré ninguna carta"
     else:
         if r_cards[0]['type_code'] == "investigator":
