@@ -1,5 +1,6 @@
 import requests
 from utils import *
+from taboo import *
 
 
 def find_deck(code: str):
@@ -11,8 +12,6 @@ def find_deck(code: str):
         if req.url != link:
             req = False
     return req.json()
-
-
 
 
 def diff_decks(a_deck1, a_deck2):

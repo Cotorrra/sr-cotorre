@@ -1,5 +1,3 @@
-from decks.deck import in_out_len
-from taboo import *
 from formating.formating_utils import *
 
 
@@ -25,46 +23,6 @@ def format_deck(deck, info):
            "%(events)s " \
            "%(skills)s " \
            "%(treachery)s" % formater
-    return text
-
-
-def format_remove_upgr_duplicates(arr):
-    array = []
-    while len(arr) > 0:
-        q = 0
-        card = arr[0]
-        while card in arr:
-            q += 1
-            arr.remove(card)
-
-        text = format_player_card_short(card, q)
-        array.append(text)
-    return array
-
-
-def format_in_out_upgr(info, prefix):
-    array_out = format_remove_upgr_duplicates(info[prefix + "_out"])
-    array_in = format_remove_upgr_duplicates(info[prefix + "_in"])
-    return array_out, array_in
-
-
-def format_upgrades(info, prefix):
-    pf_out, pf_in = format_in_out_upgr(info, prefix)
-    m_length = max(len(pf_out), len(pf_out))
-    text = ""
-    for i in range(m_length):
-        left = pf_out[i] if i < len(pf_out) else ""
-        right = pf_in[i] if i < len(pf_in) else ""
-        text += "%s <:Accion:789610653912399891> %s\n" % (left, right)
-
-    return text
-
-
-def format_special_upgr(info):
-    text = ""
-    buys = format_remove_upgr_duplicates(info['parallel_buy'])
-    for card in buys:
-        text += "%s \n" % buys
     return text
 
 

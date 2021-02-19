@@ -155,8 +155,6 @@ def hits_in_string(s1: str, s2: str):
     return hits
 
 
-def in_out_len(info, prefix):
-    return max(len(info[prefix + "_in"]), len(info[prefix + "_out"]))
 
 
 def get_qty(deck, card_id):
