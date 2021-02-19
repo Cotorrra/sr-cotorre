@@ -1,3 +1,4 @@
+from decks.deck import in_out_len
 from taboo import *
 from formating.formating_utils import *
 
@@ -24,6 +25,73 @@ def format_deck(deck, info):
            "%(events)s " \
            "%(skills)s " \
            "%(treachery)s" % formater
+    return text
+
+
+def format_remove_upgr_duplicates(arr):
+    array = []
+    while len(arr) > 0:
+        q = 0
+        card = arr[0]
+        while card in arr:
+            q += 1
+            arr.remove(card)
+
+        text = format_player_card_short(card, q)
+        array.append(text)
+    return array
+
+
+def format_in_out_upgr(info, prefix):
+    array_out = format_remove_upgr_duplicates(info[prefix + "_out"])
+    array_in = format_remove_upgr_duplicates(info[prefix + "_in"])
+    return array_out, array_in
+
+
+def format_upgrades(info, prefix):
+    pf_out, pf_in = format_in_out_upgr(info, prefix)
+    m_length = max(len(pf_out), len(pf_out))
+    text = ""
+    for i in range(m_length):
+        left = pf_out[i] if i < len(pf_out) else ""
+        right = pf_in[i] if i < len(pf_in) else ""
+        text += "%s <:Accion:789610653912399891> %s\n" % (left, right)
+
+    return text
+
+
+def format_special_upgr(info):
+    text = ""
+    buys = format_remove_upgr_duplicates(info['parallel_buy'])
+    for card in buys:
+        text += "%s \n" % buys
+    return text
+
+
+def format_upgraded_deck(deck1, info):
+    formater = {"name": "**%s**" % deck1['name'],
+                "investigator": "_Mazo para %s_" % deck1['investigator_name'],
+                "xp": "Experiencia Utilizada: %s" % str(info['xp_diff']),
+                "upgrades": "__Mejoras:__ %s \n" % format_upgrades(info, "upgrades") if in_out_len(info,
+                                                                                                   "upgrades") > 0 else "",
+                "purchases": "__Compras:__ %s \n" % format_upgrades(info, 'buys') if in_out_len(info,
+                                                                                                'buys') > 0 else "",
+                "adaptable": "__Adaptable:__  %s \n" % format_upgrades(info, 'adaptable') if in_out_len(info,
+                                                                                                        'events') > 0 else "",
+                "arcane": "__Investigación Arcana:__ %s \n" % format_upgrades(info, 'arcane_upg')
+                if in_out_len(info, 'arcane_upg') > 0 else "",
+                "special": "__Especial (Agnes/Skids)__: %s \n" % format_special_upgr(info) if len(
+                    info['parallel_buy']) > 0 else "",
+                }
+    text = "¡Mejora Calculada!: \n\n" \
+           "%(name)s \n" \
+           "%(investigator)s \n" \
+           "%(xp)s \n" \
+           "%(upgrades)s" \
+           "%(purchases)s" \
+           "%(adaptable)s " \
+           "%(arcane)s " \
+           "%(special)s" % formater
     return text
 
 

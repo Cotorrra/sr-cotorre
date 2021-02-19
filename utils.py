@@ -1,6 +1,5 @@
 import re
 import unidecode
-from formating.formating import *
 
 
 def search(query: str, cards: list):
@@ -15,6 +14,20 @@ def search(query: str, cards: list):
     # Sales en los resultados aparte si estas igual de hits con las palabras
     r_cards = [c for c in r_cards if hits_in_string(c['name'], query) == hits_in_string(r_cards[0]['name'], query)]
     return r_cards
+
+
+def find_by_id(code: str, cards: list):
+    """
+    Retorna la carta que haga match con el id entregado, de otra forma devuelve False.
+    :param code:
+    :param cards:
+    :return:
+    """
+    r_cards = [c for c in cards if c['code'] == code]
+    try:
+        return r_cards[0]
+    except IndexError:
+        return False
 
 
 def use_pc_keywords(cards: list, key_list: str):
@@ -115,13 +128,13 @@ def find_and_extract(string: str, start_s: str, end_s: str):
     :return:
     """
     if start_s == end_s:
-        enable = string.find("~") > 0
+        enable = string.find(start_s) > 0
     else:
         enable = string.__contains__(start_s) and string.__contains__(end_s)
     fst_occ = string.find(start_s) + 1
     snd_occ = string[fst_occ:].find(end_s)
     extract = string[fst_occ: fst_occ + snd_occ]
-    base = string.replace("%s%s%s)" % (start_s, extract, end_s), "", 1)
+    base = string.replace(" %s%s%s" % (start_s, extract, end_s), "", 1)
     return base, extract, enable
 
 
@@ -140,4 +153,24 @@ def hits_in_string(s1: str, s2: str):
             if w1_c == w2_c:
                 hits += 1
     return hits
+
+
+def in_out_len(info, prefix):
+    return max(len(info[prefix + "_in"]), len(info[prefix + "_out"]))
+
+
+def get_qty(deck, card_id):
+    for c_id, qty in deck['slots'].items():
+        if c_id == card_id:
+            return qty
+    return 0
+
+
+def has_trait(card, trait):
+    try:
+        traits = card['real_traits'].lower().split()
+        return "%s." % trait in traits
+
+    except KeyError:
+        return False
 

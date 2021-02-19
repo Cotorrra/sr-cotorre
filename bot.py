@@ -1,8 +1,11 @@
 import os
 
+import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import requests
+
+from decks.deck import *
 from formating.formating import *
 from utils import *
 
@@ -23,11 +26,12 @@ showing = False
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} está listo para usarse c:')
+    await bot.change_presence(activity=discord.Game(name="probar nuevas cosas"))
 
 
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
 # async def look_for_taboo(ctx):
-
+"""
 @bot.command(name='hhelp')
 async def send_help(ctx):
     response = "¿Necesitas ayuda?: " \
@@ -82,19 +86,14 @@ async def look_for_player_card(ctx):
 
 @bot.command(name='hd')
 async def look_for_deck(ctx, code: str):
-    link = 'https://es.arkhamdb.com/api/public/deck/%s' % code
-    req = requests.get(link)
-    if req.url != link:
-        link = 'https://es.arkhamdb.com/api/public/decklist/%s' % code
-        req = requests.get(link)
-        if req.url != link:
-            response = "Mazo no encontrado"
-            await dev_send(showing, ctx, response)
-
-    deck_info = format_deck_cards(req.json(), ah_all_cards)
-    response = format_deck(req.json(), deck_info)
-
-    await dev_send(showing, ctx, response)
+    deck = find_deck(code)
+    if not deck:
+        response = "Mazo no encontrado"
+        await dev_send(showing, ctx, response)
+    else:
+        deck_info = format_deck_cards(deck, ah_all_cards)
+        response = format_deck(deck, deck_info)
+        await dev_send(showing, ctx, response)
 
 
 # TODO: Armar los format_x...+
@@ -144,27 +143,16 @@ async def look_for_encounter(ctx, code: str):
 
 
 """
-@bot.command(name='s')
-async def look_for_scenario_card(ctx, code: str):
+
+
+@bot.command(name='hu')
+async def look_for_scenario_card(ctx, code1: str, code2: str):
     # Por scenario_card viene a ver acto/plan
-    response = "Trabajando en algo nuevo c:"
+    deck1 = find_deck(code1)
+    deck2 = find_deck(code2)
+    info = check_upgrade_rules(deck1, deck2, ah_player)
+    response = format_upgraded_deck(deck1, info)
     await dev_send(showing, ctx, response)
-
-@bot.command(name='l')
-async def look_for_location_card(ctx, code: str):
-    query = ' '.join(ctx.message.content.split()[1:])
-    query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
-    query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
-    r_cards = search(query, ah_encounter)
-    if sub_text_mode:
-        r_cards = [c for c in r_cards if filter_by_subtext_ec(c, sub_query)]
-    if keyword_mode:
-        r_cards = use_ec_keywords(r_cards, keyword_query)
-
-    # Lugares
-    response = "Trabajando en algo nuevo c:"
-    await dev_send(showing, ctx, response)
-"""
 
 
 async def dev_send(debug, ctx, string):

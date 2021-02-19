@@ -6,10 +6,10 @@ def format_deck_cards(deck, cards):
     info = {"assets": [], "events": [], "skills": [], "treachery": [], "permanents": [],
             "assets_q": 0, "events_q": 0, "skills_q": 0, "treachery_q": 0, "permanents_q": 0,
             "xp": 0}
+    taboo_version = "00" + str(deck['taboo_id'])
     for c_id, qty in deck['slots'].items():
         card = [c for c in cards if c['code'] == c_id][0]
         text = format_player_card_short(card, qty)
-        taboo_version = "00" + str(deck['taboo_id'])
         info["xp"] += calculate_xp(card, qty, taboo_version)
 
         if card['permanent']:
@@ -64,7 +64,7 @@ def format_inv_card_f_short(c):
     return text
 
 
-def format_player_card_short(c, qty):
+def format_player_card_short(c, qty=0):
     formater = {"name": "%s" % c['name'],
                 "level": "%s" % format_xp(c),
                 "class": faction_order[c['faction_code']] + format_faction(c),

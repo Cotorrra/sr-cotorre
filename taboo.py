@@ -1,5 +1,4 @@
 import json
-from formating.formating import *
 
 current_taboo = "003"
 
@@ -57,6 +56,24 @@ def get_tabooed_card(card_id, version=current_taboo):
         if card['code'] == card_id:
             return card
     return {}
+
+
+def calculate_xp(c, qty, taboo_ver=current_taboo):
+    chain = 0
+    if is_in_taboo(c['code'], taboo_ver):
+        if 'xp' in get_tabooed_card(c['code'], taboo_ver):
+            chain = get_tabooed_card(c['code'], taboo_ver)['xp']
+
+    if "xp" in c:
+        if c['myriad']:
+            return c['xp'] + chain
+        elif c['exceptional']:
+            # Aunque debería haber 1 en el mazo...
+            return (c['xp'] + chain) * 2 * qty
+        else:
+            return (c['xp'] + chain) * qty
+    else:
+        return chain * qty
 
 
 taboo_info = load_taboo()
