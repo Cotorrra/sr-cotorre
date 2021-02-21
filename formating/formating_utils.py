@@ -64,12 +64,19 @@ def format_inv_card_f_short(c):
     return text
 
 
+def crop_if_too_long(text):
+    if len(text) > 20:
+        return text.split()[0]
+    else:
+        return text
+
+
 def format_player_card_short(c, qty=0):
     formater = {"name": "%s" % c['name'],
                 "level": "%s" % format_xp(c),
                 "class": faction_order[c['faction_code']] + format_faction(c),
                 "quantity": "x%s" % str(qty) if qty > 1 else "",
-                "subname": ": _%s_" % c['subname'] if "subname" in c else ""
+                "subname": ": _%s_" % crop_if_too_long(c['subname'] if "subname" in c else "")
                 }
     text = "%(class)s %(name)s%(level)s%(subname)s %(quantity)s" % formater
     return text
@@ -255,6 +262,7 @@ faction_order = {
 def in_out_len(info, prefix):
     return max(len(info[prefix + "_in"]), len(info[prefix + "_out"]))
 
+
 def format_remove_upgr_duplicates(arr):
     array = []
     while len(arr) > 0:
@@ -266,7 +274,13 @@ def format_remove_upgr_duplicates(arr):
 
         text = format_player_card_short(card, q)
         array.append(text)
-    return array
+    array = sorted(array)
+    arr2 = []
+    for c in array:
+        text = c[1:]
+        arr2.append(text)
+
+    return arr2
 
 
 def format_in_out_upgr(info, prefix):
@@ -282,9 +296,10 @@ def format_upgrades(info, prefix):
     for i in range(m_length):
         left = pf_out[i] if i < len(pf_out) else ""
         right = pf_in[i] if i < len(pf_in) else ""
-        text += "%s <:Accion:789610653912399891> %s\n" % (left, right)
+        text += "\n %s <:Accion:789610653912399891> %s" % (left, right)
 
     return text
+
 
 def format_special_upgr(info):
     text = ""

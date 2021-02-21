@@ -30,12 +30,10 @@ def format_upgraded_deck(deck1, info):
     formater = {"name": "**%s**" % deck1['name'],
                 "investigator": "_Mazo para %s_" % deck1['investigator_name'],
                 "xp": "Experiencia Utilizada: %s" % str(info['xp_diff']),
-                "upgrades": "__Mejoras:__ %s \n" % format_upgrades(info, "upgrades") if in_out_len(info,
-                                                                                                   "upgrades") > 0 else "",
-                "purchases": "__Compras:__ %s \n" % format_upgrades(info, 'buys') if in_out_len(info,
+                "purchases": "__Mejoras:__ %s \n" % format_upgrades(info, 'buys') if in_out_len(info,
                                                                                                 'buys') > 0 else "",
                 "adaptable": "__Adaptable:__  %s \n" % format_upgrades(info, 'adaptable') if in_out_len(info,
-                                                                                                        'events') > 0 else "",
+                                                                                                        'adaptable') > 0 else "",
                 "arcane": "__Investigación Arcana:__ %s \n" % format_upgrades(info, 'arcane_upg')
                 if in_out_len(info, 'arcane_upg') > 0 else "",
                 "special": "__Especial (Agnes/Skids)__: %s \n" % format_special_upgr(info) if len(

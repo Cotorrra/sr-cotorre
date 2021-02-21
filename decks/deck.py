@@ -54,6 +54,10 @@ def check_upgrade_rules(deck1, deck2, cards):
     diffs = diff_decks(a_deck1, a_deck2)
     arcane_inv_used = False
     adaptable_uses = 0
+    inv_meta = json.loads(deck1['meta'])
+    parallel_upg = False
+    if "alternative_back" in inv_meta:
+        parallel_upg = True
 
     for c2 in diffs[1]:
         done_with_c2 = False
@@ -75,8 +79,8 @@ def check_upgrade_rules(deck1, deck2, cards):
                         info["arcane_upg_out"].append(real_c1)
                         diffs[0].remove(c1)
                     else:
-                        info["upgrades_in"].append(real_c2)
-                        info["upgrades_out"].append(real_c1)
+                        info["buys_in"].append(real_c2)
+                        info["buys_out"].append(real_c1)
                         diffs[0].remove(c1)
 
                     info["xp_diff"] += xp_diff
@@ -86,23 +90,20 @@ def check_upgrade_rules(deck1, deck2, cards):
             if not done_with_c2:
                 c2_lvl = real_c2['xp'] if "xp" in real_c2 else 0
                 p_upgrade = find_lower_lvl_copy_in_deck(real_c2['real_name'], deck1, cards, c2_lvl)
-                if p_upgrade:
-                    inv_meta = json.loads(deck1['meta'])
-                    if "alternative_back" in inv_meta:
-                        card_code = inv_meta['alternative_back']
-                        # TODO: Aqui se agregan los que vengan a futuro
-                        lower_card = find_by_id(p_upgrade, cards)
-                        p_upg_traits = []
-                        if card_code == "90008" and deck1['investigator_name'] == "\"Skids\" O'Toole":
-                            p_upg_traits = ["fortune", "gambit"]
-                        if card_code == "90017" and deck1['investigator_name'] == "Agnes Baker":
-                            p_upg_traits = ["spell"]
-                        for t in p_upg_traits:
-                            if has_trait(lower_card, t):
-                                info["parallel_buy"].append(real_c2)
-                                info["xp_diff"] += calculate_xp(real_c2, 1, taboo)
-                                break
-                    # return "Error"
+                if parallel_upg and p_upgrade:
+                    # TODO: Aqui se agregan los que vengan a futuro
+                    lower_card = find_by_id(p_upgrade, cards)
+                    p_upg_traits = []
+                    if deck1['investigator_name'] == "\"Skids\" O'Toole":
+                        p_upg_traits = ["fortune", "gambit"]
+                    if deck1['investigator_name'] == "Agnes Baker":
+                        p_upg_traits = ["spell"]
+                    for t in p_upg_traits:
+                        if has_trait(lower_card, t):
+                            info["parallel_buy"].append(real_c2)
+                            info["xp_diff"] += calculate_xp(real_c2, 1, taboo)
+                            break
+                # return "Error"
                 else:
                     # Ver las compras normales
                     if c2_lvl > 0:
@@ -116,9 +117,7 @@ def check_upgrade_rules(deck1, deck2, cards):
                                 if "xp" in real_c1:
                                     if real_c1["xp"] == 0:
                                         name1 = real_c1['real_name']
-                                        if find_lower_lvl_copy_in_deck(name1, deck2, cards, 6):
-                                            pass
-                                        else:
+                                        if find_greater_lvl_copy_in_array(name1, diffs[1], cards, 0) == "":
                                             info["adaptable_in"].append(real_c2)
                                             info["adaptable_out"].append(real_c1)
                                             diffs[0].remove(c1)
@@ -145,6 +144,15 @@ def deck_to_text(deck, cards):
             arr.append((title, level, c_id))
 
     return arr
+
+
+def find_greater_lvl_copy_in_array(title, arr, cards, lvl):
+    for c_id in arr:
+        c = find_by_id(c_id, cards)
+        xp = c['xp'] if "xp" in c else 0
+        if c['name'] == title and xp > lvl:
+            return c_id
+    return ""
 
 
 def find_lower_lvl_copy_in_deck(title, deck, cards, lvl):
