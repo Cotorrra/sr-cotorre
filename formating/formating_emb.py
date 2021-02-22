@@ -98,7 +98,7 @@ def format_player_card(c):
                     "%(traits)s" \
                     "%(costs)s" \
                     "%(icons)s" \
-                    "%(text)s" \
+                    "%(text)s\n" \
                     "%(flavour)s " \
                     "%(health_sanity)s \n" \
                     "%(taboo_text)s" % formater

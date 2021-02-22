@@ -31,7 +31,7 @@ async def on_ready():
 
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
 # async def look_for_taboo(ctx):
-"""
+
 @bot.command(name='hhelp')
 async def send_help(ctx):
     response = "¿Necesitas ayuda?: " \
@@ -42,9 +42,9 @@ async def send_help(ctx):
                "!ahm [nombre] ~[subtitulo]~ busca cartas de encuentros (lugares, actos, escenarios, etc.) que no " \
                "sean cartas de jugador estándar. \n"
     await ctx.send(response)
-"""
 
-@bot.command(name='hje')
+
+@bot.command(name='hj')
 async def look_for_player_card(ctx):
     skip = False
     query = ' '.join(ctx.message.content.split()[1:])
@@ -94,7 +94,7 @@ async def look_for_player_card(ctx):
         await ctx.send(response)
 
 
-@bot.command(name='hde')
+@bot.command(name='hd')
 async def look_for_deck(ctx, code: str):
     deck = find_deck(code)
     if not deck:
@@ -107,7 +107,7 @@ async def look_for_deck(ctx, code: str):
         await ctx.send(response, embed=embed)
 
 
-@bot.command(name='hme')
+@bot.command(name='hm')
 async def look_for_encounter(ctx, code: str):
     query = ' '.join(ctx.message.content.split()[1:])
     query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
@@ -164,7 +164,7 @@ async def look_for_encounter(ctx, code: str):
         await ctx.send(response)
 
 
-@bot.command(name='hue')
+@bot.command(name='hu')
 async def look_for_upgrades(ctx):
     query = ctx.message.content.split()[1:]
     if len(query) >= 2:
