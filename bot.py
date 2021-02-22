@@ -31,7 +31,7 @@ async def on_ready():
 
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
 # async def look_for_taboo(ctx):
-"""
+
 @bot.command(name='hhelp')
 async def send_help(ctx):
     response = "¿Necesitas ayuda?: " \
@@ -140,9 +140,6 @@ async def look_for_encounter(ctx, code: str):
         if len(r_cards) > 1:
             response += "\n\n Encontré otras cartas más: \n%s" % list_rest(r_cards[1:min(4, len(r_cards))])
     await dev_send(showing, ctx, response)
-
-
-"""
 
 
 @bot.command(name='hu')
