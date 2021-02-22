@@ -146,7 +146,7 @@ async def look_for_encounter(ctx, code: str):
 
 
 @bot.command(name='hu')
-async def look_for_scenario_card(ctx, code1: str, code2: str):
+async def look_for_upgrades(ctx, code1: str, code2: str):
     # Por scenario_card viene a ver acto/plan
     deck1 = find_deck(code1)
     deck2 = find_deck(code2)
