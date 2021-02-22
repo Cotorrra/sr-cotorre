@@ -43,7 +43,6 @@ def format_upgraded_deck(deck1, info):
            "%(name)s \n" \
            "%(investigator)s \n" \
            "%(xp)s \n" \
-           "%(upgrades)s" \
            "%(purchases)s" \
            "%(adaptable)s " \
            "%(arcane)s " \

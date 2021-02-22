@@ -27,7 +27,7 @@ raw_text = False
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} está listo para usarse c:')
-    await bot.change_presence(activity=discord.Game(name="a mejorar mazos"))
+    await bot.change_presence(activity=discord.Game(name="\"Mejorar Mazos\""))
 
 
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
@@ -169,8 +169,8 @@ async def look_for_upgrades(ctx):
         elif not deck2:
             response = "El Mazo dado no contiene una mejora."
         else:
-            info = check_upgrade_rules(deck1, deck2, ah_player)
-            response = format_upgraded_deck(deck1, info)
+            info = check_upgrade_rules(deck2, deck1, ah_player)
+            response = format_upgraded_deck(deck2, info)
         await dev_send(raw_text, ctx, response)
 
     else:
