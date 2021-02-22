@@ -13,6 +13,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!a')
 
+
 ah_all_cards = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=1').json()
 
 ah_player = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=0').json()
@@ -20,13 +21,13 @@ ah_player = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=0')
 # Encounter cards include: Special player cards, Weaknesses, enemies, acts, plans, etc.
 ah_encounter = [c for c in ah_all_cards if "spoiler" in c]
 
-showing = False
+raw_text = False
 
 
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} está listo para usarse c:')
-    await bot.change_presence(activity=discord.Game(name="probar nuevas cosas"))
+    await bot.change_presence(activity=discord.Game(name="\"Mejorar Mazos\""))
 
 
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
@@ -34,14 +35,19 @@ async def on_ready():
 
 @bot.command(name='hhelp')
 async def send_help(ctx):
-    response = "¿Necesitas ayuda?: " \
-               "\n !ahd [numero] Busca en ArkhamDB el mazo dado y lo muestra, tanto públicos como privados.\n" \
-               "!ahj [nombre] ~[subtitulo]~ ([extra]) Busca cartas en ArkhamDB.\n" \
-               "[extra] puede contener ser lo siguiente: '0-5' nivel de la carta, " \
-               "'G/B/R/M/S/N' la clase de la carta, P para permanente, U para único, E para excepcional.\n" \
-               "!ahm [nombre] ~[subtitulo]~ busca cartas de encuentros (lugares, actos, escenarios, etc.) que no " \
-               "sean cartas de jugador estándar. \n"
-    await ctx.send(response)
+    res = "¿Necesitas ayuda?: \n" \
+          "" \
+          "\n- !ahj [nombre] ~[subtitulo]~ ([extra]): Busca cartas en ArkhamDB.\n" \
+          "[extra] puede contener ser lo siguiente: '0-5' nivel de la carta, " \
+          "'G/B/R/M/S/N' la clase de la carta, P para permanente, U para único, E para excepcional.\n" \
+          "Por ejemplo: \"!ahj Whisky (3S)\" devolverá el Whisky de Mosto Ácido de Supervivente de nivel 3. \n" \
+          "\n- !ahm [nombre] ~[subtitulo]~: Busca cartas de encuentros (lugares, actos, escenarios, etc.) que no " \
+          "sean cartas de jugador estándar. (¡Spoilers!) \n" \
+          "\n- !ahd [numero]: Busca en ArkhamDB el mazo dado y lo muestra, tanto público como privado.\n" \
+          "\n- !ahu [numero] [numero] Busca en ArkhamDB ambos mazos y muestra las mejoras realizadas en los mazos." \
+          "Si mejoraste el mazo con ArkhamDB puedes también entregarle sólo el número del mazo más reciente." \
+          ""
+    await ctx.send(res)
 
 
 @bot.command(name='hj')
@@ -108,7 +114,7 @@ async def look_for_deck(ctx, code: str):
 
 
 @bot.command(name='hm')
-async def look_for_encounter(ctx, code: str):
+async def look_for_encounter(ctx):
     query = ' '.join(ctx.message.content.split()[1:])
     query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
     query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
