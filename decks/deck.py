@@ -155,7 +155,7 @@ def check_upgrade_rules(deck1, deck2, cards):
                         info["xp_diff"] += calculate_xp(real_c2, 1, taboo)
                     else:
                         # Ver adaptable / Compras de lvl0
-                        if get_qty(deck1, "02110") * 2 > adaptable_uses:
+                        if get_qty(deck1, "02110") * 2 > adaptable_uses and "xp" in real_c2:
                             for c1 in diffs[0]:
                                 real_c1 = find_by_id(c1, cards)
                                 if "xp" in real_c1:
@@ -168,6 +168,7 @@ def check_upgrade_rules(deck1, deck2, cards):
                                             adaptable_uses += 1
                                             break
                         else:
+                            info["buys_in"].append(real_c2)
                             info["xp_diff"] += 1 if "xp" in real_c2 else 0
 
     for c1 in diffs[0]:
