@@ -52,7 +52,6 @@ def format_upgraded_deck(deck1, info):
 
     embed = discord.Embed(title=m_title, description=m_description, color=info['color'])
 
-
     if len(info['buys_out']) > 0:
         embed.add_field(name="Cambios (-):",
                         value=format_list_of_cards(format_in_out_upgr(info, "buys")[0]), inline=True)
@@ -61,18 +60,18 @@ def format_upgraded_deck(deck1, info):
         embed.add_field(name="Cambios (+):",
                         value=format_list_of_cards(format_in_out_upgr(info, "buys")[1]), inline=True)
 
-    if in_out_len(info, 'arcane_upg') > 0:
-        embed.add_field(name="Mejora de Investigación Arcana", value=format_upgrades(info, 'arcane_upg'), inline=False)
+    # if in_out_len(info, 'arcane_upg') > 0:
+    #   embed.add_field(name="Mejora de Investigación Arcana", value=format_upgrades(info, 'arcane_upg'), inline=False)
 
-    if len(info['parallel_buy']) > 0:
-        embed.add_field(name="Mejora Especial (Agnes/Skids)", value=format_special_upgr(info), inline=False)
+    # if len(info['parallel_buy']) > 0:
+    #    embed.add_field(name="Mejora Especial (Agnes/Skids)", value=format_special_upgr(info), inline=False)
 
-    if in_out_len(info, 'adaptable') > 0:
-        embed.add_field(name="Cambios por Adaptable (-):",
-                        value=format_list_of_cards(format_in_out_upgr(info, "adaptable")[0]), inline=True)
+    # if in_out_len(info, 'adaptable') > 0:
+    #    embed.add_field(name="Cambios por Adaptable (-):",
+    #                    value=format_list_of_cards(format_in_out_upgr(info, "adaptable")[0]), inline=True)
 
-        embed.add_field(name="Cambios por Adaptable (+)",
-                        value=format_list_of_cards(format_in_out_upgr(info, "adaptable")[1]), inline=True)
+    #    embed.add_field(name="Cambios por Adaptable (+)",
+    #                    value=format_list_of_cards(format_in_out_upgr(info, "adaptable")[1]), inline=True)
 
     return embed
 
@@ -93,7 +92,7 @@ def format_player_card(c):
                 "health_sanity": "%s \n" % format_health_sanity(c) if format_health_sanity(c) != "" else "",
                 "taboo_text": format_taboo_text(c['code'])
                 }
-    m_title = " %(faction)s %(name)s%(subtext)s%(level)s" % formater
+    m_title = "%(faction)s %(name)s%(subtext)s%(level)s" % formater
     m_description = "%(type)s \n" \
                     "%(traits)s" \
                     "%(costs)s" \

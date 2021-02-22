@@ -27,7 +27,7 @@ raw_text = False
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} está listo para usarse c:')
-    await bot.change_presence(activity=discord.Game(name="\"Mejorar Mazos\""))
+    await bot.change_presence(activity=discord.Game(name="\"Arkham Horror LCG\""))
 
 
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')

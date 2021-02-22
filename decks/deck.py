@@ -88,13 +88,8 @@ def deck_to_array(deck):
             arr_deck.append(c_id)
     return arr_deck
 
-
 def check_upgrade_rules(deck1, deck2, cards):
-    info = {"upgrades_out": [], "upgrades_in": [],
-            "buys_in": [], "buys_out": [],
-            "parallel_buy": [],
-            "arcane_upg_in": [], "arcane_upg_out": [],
-            "adaptable_in": [], "adaptable_out": [],
+    info = {"buys_in": [], "buys_out": [],
             "xp_diff": 0, "color": get_color_by_investigator(deck1, cards)}
     taboo = "00" + str(deck1['taboo_id'])
     a_deck1 = deck_to_array(deck1)
@@ -124,8 +119,8 @@ def check_upgrade_rules(deck1, deck2, cards):
                         # 04109 es Investigación Arcana
                         xp_diff = max(xp_diff - get_qty(deck1, "04109"), 0)
                         arcane_inv_used = True
-                        info["arcane_upg_in"].append(real_c2)
-                        info["arcane_upg_out"].append(real_c1)
+                        info["buys_in"].append(real_c2)
+                        info["buys_out"].append(real_c1)
                         diffs[0].remove(c1)
                     else:
                         info["buys_in"].append(real_c2)
@@ -149,7 +144,7 @@ def check_upgrade_rules(deck1, deck2, cards):
                         p_upg_traits = ["spell"]
                     for t in p_upg_traits:
                         if has_trait(lower_card, t):
-                            info["parallel_buy"].append(real_c2)
+                            info["buys_in"].append(real_c2)
                             info["xp_diff"] += calculate_xp(real_c2, 1, taboo)
                             break
                 # return "Error"
@@ -167,13 +162,12 @@ def check_upgrade_rules(deck1, deck2, cards):
                                     if real_c1["xp"] == 0:
                                         name1 = real_c1['real_name']
                                         if find_greater_lvl_copy_in_array(name1, diffs[1], cards, 0) == "":
-                                            info["adaptable_in"].append(real_c2)
-                                            info["adaptable_out"].append(real_c1)
+                                            info["buys_in"].append(real_c2)
+                                            info["buys_out"].append(real_c1)
                                             diffs[0].remove(c1)
                                             adaptable_uses += 1
                                             break
                         else:
-                            info["buys_in"].append(real_c2)
                             info["xp_diff"] += 1 if "xp" in real_c2 else 0
 
     for c1 in diffs[0]:
@@ -210,5 +204,3 @@ def find_lower_lvl_copy_in_deck(title, deck, cards, lvl):
         if c_t == title and c_lvl < lvl:
             return c_id
     return ""
-
-
