@@ -52,11 +52,11 @@ def format_upgraded_deck(deck1, info):
 
     embed = discord.Embed(title=m_title, description=m_description, color=info['color'])
 
-    if len(info['buys_in']) > 0:
-        embed.add_field(name="Cambios (+):", value=format_list_of_cards(format_in_out_upgr(info, "buys")[0]), inline=True)
-
     if len(info['buys_out']) > 0:
         embed.add_field(name="Cambios (-):", value=format_list_of_cards(format_in_out_upgr(info, "buys")[1]), inline=True)
+
+    if len(info['buys_in']) > 0:
+        embed.add_field(name="Cambios (+):", value=format_list_of_cards(format_in_out_upgr(info, "buys")[0]), inline=True)
 
     if in_out_len(info, 'adaptable') > 0:
         embed.add_field(name="Cambios por Adaptable", value=format_upgrades(info, 'adaptable'), inline=False)
