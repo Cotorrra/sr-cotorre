@@ -64,19 +64,12 @@ def format_inv_card_f_short(c):
     return text
 
 
-def crop_if_too_long(text):
-    if len(text) > 20:
-        return text.split()[0]
-    else:
-        return text
-
-
 def format_player_card_short(c, qty=0):
     formater = {"name": "%s" % c['name'],
                 "level": "%s" % format_xp(c),
                 "class": faction_order[c['faction_code']] + format_faction(c),
                 "quantity": "x%s" % str(qty) if qty > 1 else "",
-                "subname": ": _%s_" % crop_if_too_long(c['subname'] if "subname" in c else "")
+                "subname": ": _%s_" % c['subname'] if ("subname" in c and not c["is_unique"]) else ""
                 }
     text = "%(class)s %(name)s%(level)s%(subname)s %(quantity)s" % formater
     return text
@@ -124,7 +117,7 @@ def format_text(text):
                    "]]": "***",
                    "<cite>": "\n\t— ",
                    "</cite>": "",
-    }
+                   }
 
     for key, value in text_format.items():
         text = text.replace(key, value)
@@ -162,7 +155,7 @@ def format_taboo_text(card_id, version=current_taboo):
 
 def format_health_sanity(c):
     return format_text("%s%s" % ("[health] %s " % format_number(c['health']) if "health" in c else "",
-                                      "[sanity] %s" % format_number(c['sanity']) if "sanity" in c else ""))
+                                 "[sanity] %s" % format_number(c['sanity']) if "sanity" in c else ""))
 
 
 def format_skill_icons(c):
@@ -307,4 +300,3 @@ def format_special_upgr(info):
     for card in buys:
         text += "%s \n" % buys
     return text
-

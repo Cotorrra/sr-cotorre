@@ -3,6 +3,18 @@ from utils import *
 from taboo import *
 
 
+def find_former_deck(code: str):
+    curr_deck = find_deck(code)
+    if curr_deck:
+        former_code = str(curr_deck["previous_deck"])
+        former_deck = find_deck(former_code)
+        if former_deck:
+            return former_deck
+        else:
+            return False
+    return False
+
+
 def find_deck(code: str):
     link = 'https://es.arkhamdb.com/api/public/deck/%s' % code
     req = requests.get(link)

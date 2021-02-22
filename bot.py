@@ -13,6 +13,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!a')
 
+
 ah_all_cards = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=1').json()
 
 ah_player = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=0').json()
@@ -20,13 +21,13 @@ ah_player = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=0')
 # Encounter cards include: Special player cards, Weaknesses, enemies, acts, plans, etc.
 ah_encounter = [c for c in ah_all_cards if "spoiler" in c]
 
-showing = False
+raw_text = False
 
 
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} está listo para usarse c:')
-    await bot.change_presence(activity=discord.Game(name="probar nuevas cosas"))
+    await bot.change_presence(activity=discord.Game(name="a mejorar mazos"))
 
 
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
@@ -34,14 +35,19 @@ async def on_ready():
 
 @bot.command(name='hhelp')
 async def send_help(ctx):
-    response = "¿Necesitas ayuda?: " \
-               "\n !ahd [numero] Busca en ArkhamDB el mazo dado y lo muestra, tanto públicos como privados.\n" \
-               "!ahj [nombre] ~[subtitulo]~ ([extra]) Busca cartas en ArkhamDB.\n" \
-               "[extra] puede contener ser lo siguiente: '0-5' nivel de la carta, " \
-               "'G/B/R/M/S/N' la clase de la carta, P para permanente, U para único, E para excepcional.\n" \
-               "!ahm [nombre] ~[subtitulo]~ busca cartas de encuentros (lugares, actos, escenarios, etc.) que no " \
-               "sean cartas de jugador estándar. \n"
-    await ctx.send(response)
+    res = "¿Necesitas ayuda?: \n" \
+          "```" \
+          "\n - !ahj [nombre] ~[subtitulo]~ ([extra]): Busca cartas en ArkhamDB.\n" \
+          "[extra] puede contener ser lo siguiente: '0-5' nivel de la carta, " \
+          "'G/B/R/M/S/N' la clase de la carta, P para permanente, U para único, E para excepcional.\n" \
+          "Por ejemplo: \"!ahj Whisky (3S)\" devolverá el Whisky de Mosto Ácido de Supervivente de nivel 3. \n" \
+          "\n- !ahm [nombre] ~[subtitulo]~: Busca cartas de encuentros (lugares, actos, escenarios, etc.) que no " \
+          "sean cartas de jugador estándar. (¡Spoilers!) \n" \
+          "\n - !ahd [numero]: Busca en ArkhamDB el mazo dado y lo muestra, tanto público como privado.\n" \
+          "\n - !ahu [numero] [numero] Busca en ArkhamDB ambos mazos y muestra las mejoras realizadas en los mazos." \
+          "Si mejoraste el mazo con ArkhamDB puedes también entregarle sólo el número del mazo más reciente." \
+          "```"
+    await ctx.send(res)
 
 
 @bot.command(name='hj')
@@ -61,7 +67,7 @@ async def look_for_player_card(ctx):
     r_cards = search(query, r_cards)
 
     if len(r_cards) == 0 or len(r_cards) == len(ah_player):
-        response = "No encontré ninguna carta"
+        response = "No encontré ninguna carta :parrot:"
 
     else:
         if r_cards[0]['name'] == "Debilidad básica aleatoria":
@@ -81,7 +87,7 @@ async def look_for_player_card(ctx):
 
         if len(r_cards) > 1 and not skip:
             response += "\n\n Encontré otras cartas más: \n%s" % list_rest(r_cards[1:min(4, len(r_cards))])
-    await dev_send(showing, ctx, response)
+    await dev_send(raw_text, ctx, response)
 
 
 @bot.command(name='hd')
@@ -89,16 +95,16 @@ async def look_for_deck(ctx, code: str):
     deck = find_deck(code)
     if not deck:
         response = "Mazo no encontrado"
-        await dev_send(showing, ctx, response)
+        await dev_send(raw_text, ctx, response)
     else:
         deck_info = format_deck_cards(deck, ah_all_cards)
         response = format_deck(deck, deck_info)
-        await dev_send(showing, ctx, response)
+        await dev_send(raw_text, ctx, response)
 
 
 # TODO: Armar los format_x...+
 @bot.command(name='hm')
-async def look_for_encounter(ctx, code: str):
+async def look_for_encounter(ctx):
     query = ' '.join(ctx.message.content.split()[1:])
     query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
     query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
@@ -139,17 +145,37 @@ async def look_for_encounter(ctx, code: str):
 
         if len(r_cards) > 1:
             response += "\n\n Encontré otras cartas más: \n%s" % list_rest(r_cards[1:min(4, len(r_cards))])
-    await dev_send(showing, ctx, response)
+    await dev_send(raw_text, ctx, response)
 
 
 @bot.command(name='hu')
-async def look_for_upgrades(ctx, code1: str, code2: str):
-    # Por scenario_card viene a ver acto/plan
-    deck1 = find_deck(code1)
-    deck2 = find_deck(code2)
-    info = check_upgrade_rules(deck1, deck2, ah_player)
-    response = format_upgraded_deck(deck1, info)
-    await dev_send(showing, ctx, response)
+async def look_for_upgrades(ctx):
+    query = ctx.message.content.split()[1:]
+    if len(query) >= 2:
+        deck1 = find_deck(query[0])
+        deck2 = find_deck(query[1])
+        if not deck1 or deck2:
+            response = "No encontre uno de los mazos."
+        else:
+            info = check_upgrade_rules(deck1, deck2, ah_player)
+            response = format_upgraded_deck(deck1, info)
+        await dev_send(raw_text, ctx, response)
+
+    elif len(query) == 1:
+        deck1 = find_deck(query[0])
+        deck2 = find_former_deck(query[0])
+        if not deck1:
+            response = "No encontré el mazo."
+        elif not deck2:
+            response = "El Mazo dado no contiene una mejora."
+        else:
+            info = check_upgrade_rules(deck1, deck2, ah_player)
+            response = format_upgraded_deck(deck1, info)
+        await dev_send(raw_text, ctx, response)
+
+    else:
+        response = "Uso de !ahu [numero] [numero] o bien !ahu [numero]"
+        await dev_send(raw_text, ctx, response)
 
 
 async def dev_send(debug, ctx, string):
