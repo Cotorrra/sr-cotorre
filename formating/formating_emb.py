@@ -21,7 +21,7 @@ def format_deck(deck, info):
     m_description = "%(investigator)s \n" \
                     "%(xp)s" % formater
 
-    inline = True
+    inline = False
 
     embed = discord.Embed(title=m_title, description=m_description, color=info['color'])
     if len(info['assets']) > 0:

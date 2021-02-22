@@ -35,7 +35,7 @@ def format_player_card_short(c, qty=0):
                 "level": "%s" % format_xp(c),
                 "class": faction_order[c['faction_code']] + format_faction(c),
                 "quantity": "x%s" % str(qty) if qty > 1 else "",
-                "subname": ": _%s_" % c['subname'] if ("subname" in c and not c["is_unique"]) else ""
+                "subname": ": _%s_" % c['subname'] if ("subname" in c) else "" # and not c["is_unique"]) else ""
                 }
     text = "%(class)s %(name)s%(level)s%(subname)s %(quantity)s" % formater
     return text

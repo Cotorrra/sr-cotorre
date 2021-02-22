@@ -89,6 +89,7 @@ def deck_to_array(deck):
             arr_deck.append(c_id)
     return arr_deck
 
+
 def check_upgrade_rules(deck1, deck2, cards):
     info = {"buys_in": [], "buys_out": [],
             "xp_diff": 0, "color": get_color_by_investigator(deck1, cards)}
