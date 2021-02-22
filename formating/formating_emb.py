@@ -21,21 +21,23 @@ def format_deck(deck, info):
     m_description = "%(investigator)s \n" \
                     "%(xp)s" % formater
 
+    inline = False
+
     embed = discord.Embed(title=m_title, description=m_description, color=info['color'])
     if len(info['assets']) > 0:
-        embed.add_field(name="%(assets)s" % formater, value=make_string(info, 'assets')[1], inline=True)
+        embed.add_field(name="%(assets)s" % formater, value=make_string(info, 'assets')[1], inline=inline)
 
     if len(info['permanents']) > 0:
-        embed.add_field(name="%(permanents)s" % formater, value=make_string(info, 'permanents')[1], inline=True)
+        embed.add_field(name="%(permanents)s" % formater, value=make_string(info, 'permanents')[1], inline=inline)
 
     if len(info['events']) > 0:
-        embed.add_field(name="%(events)s" % formater, value=make_string(info, 'events')[1], inline=True)
+        embed.add_field(name="%(events)s" % formater, value=make_string(info, 'events')[1], inline=inline)
 
     if len(info['skills']) > 0:
-        embed.add_field(name="%(skills)s" % formater, value=make_string(info, 'skills')[1], inline=True)
+        embed.add_field(name="%(skills)s" % formater, value=make_string(info, 'skills')[1], inline=inline)
 
     if len(info['skills']) > 0:
-        embed.add_field(name="%(treachery)s" % formater, value=make_string(info, 'treachery')[1], inline=True)
+        embed.add_field(name="%(treachery)s" % formater, value=make_string(info, 'treachery')[1], inline=inline)
 
     return embed
 
@@ -124,12 +126,12 @@ def format_enemy_card(c):
                 "attack": "Ataque: %s\n" % format_attack(c) if format_attack(c) != "" else ""}
 
     m_title = " %(faction)s %(name)s%(subtext)s" % formater
-    m_description = "%(type)s\n" \
+    m_description = "%(type)s" \
                     "%(traits)s" \
                     "%(stats)s\n" \
                     "%(text)s\n" \
-                    "%(flavour)s " \
-                    "%(attack)s" % formater
+                    "%(attack)s" \
+                    "%(flavour)s " % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
 
@@ -231,17 +233,17 @@ def format_scenario_card(c):
 def format_treachery_card(c):
     formater = {"name": format_name(c),
                 "faction": format_faction(c),
-                "type": "__%s__" % c['type_name'],
-                "traits": "*%s*" % c['traits'],
+                "type": "__%s__\n" % c['type_name'],
+                "traits": "*%s*\n" % c['traits'],
                 "text": "> %s \n" % format_card_text(c),
                 "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
                 "artist": format_illustrator(c),
                 "set": format_set(c)}
 
     m_title = "%(faction)s %(name)s" % formater
-    m_description = "%(type)s \n" \
+    m_description = "%(type)s" \
                     "%(traits)s \n" \
-                    "%(text)s" \
+                    "%(text)s \n" \
                     "%(flavour)s " % formater
     m_footnote = "%(artist)s \n" \
                  "%(set)s" % formater
@@ -256,12 +258,12 @@ def format_inv_card_f(c):
     formater = {"class": format_faction(c),
                 "name": format_name(c),
                 "subname": format_subtext(c),
-                "skills": format_inv_skills(c),
+                "skills":  "%s \n" % format_inv_skills(c),
                 "health_sanity": format_text("%s%s" % ("[health] %s " % c['health'], "[sanity] %s" % c['sanity'])),
                 "ability": "> %s \n" % format_card_text(c),
                 "artist": format_illustrator(c),
                 "pack": format_set(c),
-                "traits": "*%s*" % c['traits'],
+                "traits": "*%s*\n" % c['traits'],
                 "taboo_text": format_taboo_text(c['code'])
                 }
 
