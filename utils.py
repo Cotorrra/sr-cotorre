@@ -172,3 +172,20 @@ def has_trait(card, trait):
     except KeyError:
         return False
 
+def color_picker(c):
+    colors = {
+        "survivor": 0xcc3038,
+        "rogue": 0x107116,
+        "guardian": 0x2b80c5,
+        "mystic": 0x4331b9,
+        "seeker": 0xec8426,
+        "neutral": 0x606060,
+        "mythos": 0x000000,
+    }
+    return colors[c['faction_code']]
+
+
+def get_color_by_investigator(deck, cards):
+    inv_id = deck['investigator_code']
+    inv_card = find_by_id(inv_id, cards)
+    return color_picker(inv_card)

@@ -1,6 +1,54 @@
 import requests
+
+from formating.formating_utils import format_player_card_short
 from utils import *
 from taboo import *
+
+
+def find_former_deck(code: str):
+    curr_deck = find_deck(code)
+    if curr_deck:
+        former_code = str(curr_deck["previous_deck"])
+        former_deck = find_deck(former_code)
+        if former_deck:
+            return former_deck
+        else:
+            return False
+    return False
+
+
+def format_deck_cards(deck, cards):
+    info = {"assets": [], "events": [], "skills": [], "treachery": [], "permanents": [], "assets_q": 0, "events_q": 0,
+            "skills_q": 0, "treachery_q": 0, "permanents_q": 0,
+            "xp": 0, "color": get_color_by_investigator(deck, cards)}
+    taboo_version = "00" + str(deck['taboo_id'])
+    for c_id, qty in deck['slots'].items():
+        card = [c for c in cards if c['code'] == c_id][0]
+        text = format_player_card_short(card, qty)
+        info["xp"] += calculate_xp(card, qty, taboo_version)
+
+        if card['permanent']:
+            info['permanents'].append(text)
+            info['permanents_q'] += qty
+        elif card['type_code'] == "asset":
+            info['assets'].append(text)
+            info['assets_q'] += qty
+        elif card['type_code'] == "event":
+            info['events'].append(text)
+            info['events_q'] += qty
+        elif card['type_code'] == "skill":
+            info['skills'].append(text)
+            info['skills_q'] += qty
+        else:
+            info['treachery'].append(text)
+            info['treachery_q'] += qty
+
+    info['assets'] = sorted(info['assets'])
+    info['events'] = sorted(info['events'])
+    info['skills'] = sorted(info['skills'])
+    info['treachery'] = sorted(info['treachery'])
+    info['permanents'] = sorted(info['permanents'])
+    return info
 
 
 def find_deck(code: str):
@@ -47,7 +95,7 @@ def check_upgrade_rules(deck1, deck2, cards):
             "parallel_buy": [],
             "arcane_upg_in": [], "arcane_upg_out": [],
             "adaptable_in": [], "adaptable_out": [],
-            "xp_diff": 0}
+            "xp_diff": 0, "color": get_color_by_investigator(deck1, cards)}
     taboo = "00" + str(deck1['taboo_id'])
     a_deck1 = deck_to_array(deck1)
     a_deck2 = deck_to_array(deck2)
@@ -63,6 +111,7 @@ def check_upgrade_rules(deck1, deck2, cards):
         done_with_c2 = False
         real_c2 = find_by_id(c2, cards)
         if real_c2:
+            # TODO: Si la carta es una traición no se pone en la cosas
             name2 = real_c2['real_name']
             for c1 in diffs[0]:
                 real_c1 = find_by_id(c1, cards)
@@ -161,3 +210,5 @@ def find_lower_lvl_copy_in_deck(title, deck, cards, lvl):
         if c_t == title and c_lvl < lvl:
             return c_id
     return ""
+
+

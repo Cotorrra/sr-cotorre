@@ -1,46 +1,12 @@
-from formating.formating import *
 from taboo import *
+from utils import *
 
 
-def format_deck_cards(deck, cards):
-    info = {"assets": [], "events": [], "skills": [], "treachery": [], "permanents": [],
-            "assets_q": 0, "events_q": 0, "skills_q": 0, "treachery_q": 0, "permanents_q": 0,
-            "xp": 0}
-    taboo_version = "00" + str(deck['taboo_id'])
-    for c_id, qty in deck['slots'].items():
-        card = [c for c in cards if c['code'] == c_id][0]
-        text = format_player_card_short(card, qty)
-        info["xp"] += calculate_xp(card, qty, taboo_version)
-
-        if card['permanent']:
-            info['permanents'].append(text)
-            info['permanents_q'] += qty
-        elif card['type_code'] == "asset":
-            info['assets'].append(text)
-            info['assets_q'] += qty
-        elif card['type_code'] == "event":
-            info['events'].append(text)
-            info['events_q'] += qty
-        elif card['type_code'] == "skill":
-            info['skills'].append(text)
-            info['skills_q'] += qty
-        else:
-            info['treachery'].append(text)
-            info['treachery_q'] += qty
-
-    info['assets'] = sorted(info['assets'])
-    info['events'] = sorted(info['events'])
-    info['skills'] = sorted(info['skills'])
-    info['treachery'] = sorted(info['treachery'])
-    info['permanents'] = sorted(info['permanents'])
-    return info
-
-
-def make_string(info, tag):
+def make_string(info, tag, prefix=""):
     array = info[tag]
     text = ""
     for c in array:
-        text += "\n\t %s" % format_text(c)[1:]
+        text += "%s%s \n" % (prefix, format_text(c)[1:])
     return info["%s_q" % tag], text
 
 
@@ -48,9 +14,9 @@ def list_rest(array):
     text = ""
     for c in array:
         if c['type_code'] == "investigator":
-            text += " %s \n" % format_inv_card_f_short(c)
+            text += "%s \n" % format_inv_card_f_short(c)
         else:
-            text += " %s \n" % format_player_card_short(c, 1)[1:]
+            text += "%s \n" % format_player_card_short(c, 1)[1:]
     return text
 
 
@@ -64,19 +30,12 @@ def format_inv_card_f_short(c):
     return text
 
 
-def crop_if_too_long(text):
-    if len(text) > 20:
-        return text.split()[0]
-    else:
-        return text
-
-
 def format_player_card_short(c, qty=0):
     formater = {"name": "%s" % c['name'],
                 "level": "%s" % format_xp(c),
                 "class": faction_order[c['faction_code']] + format_faction(c),
                 "quantity": "x%s" % str(qty) if qty > 1 else "",
-                "subname": ": _%s_" % crop_if_too_long(c['subname'] if "subname" in c else "")
+                "subname": ": _%s_" % c['subname'] if ("subname" in c and not c["is_unique"]) else ""
                 }
     text = "%(class)s %(name)s%(level)s%(subname)s %(quantity)s" % formater
     return text
@@ -122,9 +81,9 @@ def format_text(text):
                    "</u>": "__",
                    "[[": "***",
                    "]]": "***",
-                   "<cite>": "\n\t— ",
+                   "<cite>": "\n— ",
                    "</cite>": "",
-    }
+                   }
 
     for key, value in text_format.items():
         text = text.replace(key, value)
@@ -162,7 +121,7 @@ def format_taboo_text(card_id, version=current_taboo):
 
 def format_health_sanity(c):
     return format_text("%s%s" % ("[health] %s " % format_number(c['health']) if "health" in c else "",
-                                      "[sanity] %s" % format_number(c['sanity']) if "sanity" in c else ""))
+                                 "[sanity] %s" % format_number(c['sanity']) if "sanity" in c else ""))
 
 
 def format_skill_icons(c):
@@ -201,7 +160,7 @@ def format_enemy_stats(c):
                 "agility": "[agility] %s" % (format_number(c['enemy_evade']) if "enemy_evade" in c else "-")
                 }
 
-    return format_text("%(health)s%(combat)s%(agility)s\n" % formater)
+    return format_text("%(combat)s | %(health)s | %(agility)s\n" % formater)
 
 
 def format_clues(c):
@@ -307,4 +266,22 @@ def format_special_upgr(info):
     for card in buys:
         text += "%s \n" % buys
     return text
+
+
+def set_thumbnail_image(c, embed):
+    if "imagesrc" in c:
+        embed.set_thumbnail(url="https://arkhamdb.com%s" % c["imagesrc"])
+
+
+def format_illustrator(c):
+    return "🖌 %s" % c['illustrator']
+
+
+def format_name(c):
+    return "*%s" % c['name'] if c['is_unique'] else "%s" % c['name']
+
+
+def format_subtext(c):
+    return ": _%s_" % c['subname'] if 'subname' in c else ""
+
 
