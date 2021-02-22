@@ -223,13 +223,15 @@ def in_out_len(info, prefix):
 
 
 def format_remove_upgr_duplicates(arr):
+    copy_arr = arr.copy()
     array = []
-    while len(arr) > 0:
+
+    while len(copy_arr) > 0:
         q = 0
-        card = arr[0]
-        while card in arr:
+        card = copy_arr[0]
+        while card in copy_arr:
             q += 1
-            arr.remove(card)
+            copy_arr.remove(card)
 
         text = format_player_card_short(card, q)
         array.append(text)
@@ -246,6 +248,13 @@ def format_in_out_upgr(info, prefix):
     array_out = format_remove_upgr_duplicates(info[prefix + "_out"])
     array_in = format_remove_upgr_duplicates(info[prefix + "_in"])
     return array_out, array_in
+
+
+def format_list_of_cards(cards):
+    text = ""
+    for c in cards:
+        text += "%s \n" % c
+    return text
 
 
 def format_upgrades(info, prefix):

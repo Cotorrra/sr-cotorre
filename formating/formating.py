@@ -1,6 +1,8 @@
 from formating.formating_utils import *
 
 
+# Este módulo está sólo para mirarlo c:
+
 def format_deck(deck, info):
     formater = {"name": "**%s**" % deck['name'],
                 "investigator": "_Mazo para %s_" % deck['investigator_name'],
