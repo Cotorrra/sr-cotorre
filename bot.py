@@ -189,7 +189,7 @@ async def look_for_upgrades(ctx):
             response = "El Mazo dado no contiene una mejora."
             ctx.send(response)
         else:
-            info = check_upgrade_rules(deck1, deck2, ah_player)
+            info = check_upgrade_rules(deck2, deck1, ah_player)
             response = "¡Encontré una Mejora!"
             embed = format_upgraded_deck(deck1, info)
             await ctx.send(response, embed=embed)

@@ -52,20 +52,27 @@ def format_upgraded_deck(deck1, info):
 
     embed = discord.Embed(title=m_title, description=m_description, color=info['color'])
 
+
     if len(info['buys_out']) > 0:
-        embed.add_field(name="Cambios (-):", value=format_list_of_cards(format_in_out_upgr(info, "buys")[1]), inline=True)
+        embed.add_field(name="Cambios (-):",
+                        value=format_list_of_cards(format_in_out_upgr(info, "buys")[0]), inline=True)
 
     if len(info['buys_in']) > 0:
-        embed.add_field(name="Cambios (+):", value=format_list_of_cards(format_in_out_upgr(info, "buys")[0]), inline=True)
-
-    if in_out_len(info, 'adaptable') > 0:
-        embed.add_field(name="Cambios por Adaptable", value=format_upgrades(info, 'adaptable'), inline=False)
+        embed.add_field(name="Cambios (+):",
+                        value=format_list_of_cards(format_in_out_upgr(info, "buys")[1]), inline=True)
 
     if in_out_len(info, 'arcane_upg') > 0:
         embed.add_field(name="Mejora de Investigación Arcana", value=format_upgrades(info, 'arcane_upg'), inline=False)
 
     if len(info['parallel_buy']) > 0:
         embed.add_field(name="Mejora Especial (Agnes/Skids)", value=format_special_upgr(info), inline=False)
+
+    if in_out_len(info, 'adaptable') > 0:
+        embed.add_field(name="Cambios por Adaptable (-):",
+                        value=format_list_of_cards(format_in_out_upgr(info, "adaptable")[0]), inline=True)
+
+        embed.add_field(name="Cambios por Adaptable (+)",
+                        value=format_list_of_cards(format_in_out_upgr(info, "adaptable")[1]), inline=True)
 
     return embed
 
@@ -80,7 +87,7 @@ def format_player_card(c):
                 "icons": "Iconos de Habilidad: %s\n" % format_skill_icons(c) if format_skill_icons(c) != "" else "",
                 "costs": "Coste: %s \n" % format_number(c['cost']) if "cost" in c else "",
                 "text": "> %s \n" % format_card_text(c),
-                "flavour": "_\"%s\"_\n" % format_text(c['flavor']) if "flavor" in c else "",
+                "flavour": "_%s_\n" % format_text(c['flavor']) if "flavor" in c else "",
                 "artist": format_illustrator(c),
                 "pack": format_set(c),
                 "health_sanity": "%s \n" % format_health_sanity(c) if format_health_sanity(c) != "" else "",
@@ -110,8 +117,8 @@ def format_enemy_card(c):
                 "faction": format_faction(c),
                 "type": "__%s__" % c['type_name'],
                 "traits": "*%s* " % c['traits'],
-                "text": "%s \n" % format_card_text(c),
-                "flavour": "_\"%s\"_\n" % format_text(c['flavor']) if "flavor" in c else "",
+                "text": "> %s \n" % format_card_text(c),
+                "flavour": "_%s_\n" % format_text(c['flavor']) if "flavor" in c else "",
                 "artist": format_illustrator(c),
                 "pack": format_set(c),
                 "stats": format_enemy_stats(c),
@@ -159,7 +166,7 @@ def format_act_card_f(c):
 def format_agenda_card_f(c):
     formater = {"name": format_name(c),
                 "stage": "__Plan %s__" % c['stage'],
-                "flavour": "_\"%s\"_\n" % format_text(c['flavor']) if "flavor" in c else "",
+                "flavour": "_%s_\n" % format_text(c['flavor']) if "flavor" in c else "",
                 "doom": format_text("[doom] %s" % (c['doom'] if "doom" in c else "-")),
                 "text": "> %s \n" % format_card_text(c) if "text" in c else "",
                 "pack": format_set(c),
@@ -228,7 +235,7 @@ def format_treachery_card(c):
                 "type": "__%s__" % c['type_name'],
                 "traits": "*%s*" % c['traits'],
                 "text": "> %s \n" % format_card_text(c),
-                "flavour": "_\"%s\"_\n" % c['flavor'] if "flavor" in c else "",
+                "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
                 "artist": format_illustrator(c),
                 "set": format_set(c)}
 
