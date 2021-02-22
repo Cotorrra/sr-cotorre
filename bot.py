@@ -56,7 +56,7 @@ async def look_for_player_card(ctx):
     query = ' '.join(ctx.message.content.split()[1:])
     query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
     query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
-    r_cards = ah_player.copy()
+    r_cards = sorted(ah_player.copy(), key=lambda card: card['name'])
 
     if sub_text_mode:
         r_cards = [c for c in r_cards if filter_by_subtext(c, sub_query)]
@@ -118,7 +118,7 @@ async def look_for_encounter(ctx):
     query = ' '.join(ctx.message.content.split()[1:])
     query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
     query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
-    r_cards = sorted(ah_encounter.copy())
+    r_cards = sorted(ah_encounter.copy(), key=lambda card: card['name'])
     if sub_text_mode:
         r_cards = [c for c in r_cards if filter_by_subtext_ec(c, sub_query)]
     if keyword_mode:
