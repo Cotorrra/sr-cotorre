@@ -36,17 +36,17 @@ async def on_ready():
 @bot.command(name='hhelp')
 async def send_help(ctx):
     res = "¿Necesitas ayuda?: \n" \
-          "```" \
-          "\n - !ahj [nombre] ~[subtitulo]~ ([extra]): Busca cartas en ArkhamDB.\n" \
+          "" \
+          "\n- !ahj [nombre] ~[subtitulo]~ ([extra]): Busca cartas en ArkhamDB.\n" \
           "[extra] puede contener ser lo siguiente: '0-5' nivel de la carta, " \
           "'G/B/R/M/S/N' la clase de la carta, P para permanente, U para único, E para excepcional.\n" \
           "Por ejemplo: \"!ahj Whisky (3S)\" devolverá el Whisky de Mosto Ácido de Supervivente de nivel 3. \n" \
           "\n- !ahm [nombre] ~[subtitulo]~: Busca cartas de encuentros (lugares, actos, escenarios, etc.) que no " \
           "sean cartas de jugador estándar. (¡Spoilers!) \n" \
-          "\n - !ahd [numero]: Busca en ArkhamDB el mazo dado y lo muestra, tanto público como privado.\n" \
-          "\n - !ahu [numero] [numero] Busca en ArkhamDB ambos mazos y muestra las mejoras realizadas en los mazos." \
+          "\n- !ahd [numero]: Busca en ArkhamDB el mazo dado y lo muestra, tanto público como privado.\n" \
+          "\n- !ahu [numero] [numero] Busca en ArkhamDB ambos mazos y muestra las mejoras realizadas en los mazos." \
           "Si mejoraste el mazo con ArkhamDB puedes también entregarle sólo el número del mazo más reciente." \
-          "```"
+          ""
     await ctx.send(res)
 
 
