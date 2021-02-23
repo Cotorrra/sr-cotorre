@@ -2,6 +2,25 @@ import re
 import unidecode
 
 
+def card_search(query, cards, keyword_func):
+    query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
+    query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
+    f_cards = sorted(cards.copy(), key=lambda card: card['name'])
+
+    if sub_text_mode:
+        f_cards = [c for c in f_cards if filter_by_subtext(c, sub_query)]
+
+    if keyword_mode:
+        f_cards = keyword_func(f_cards, keyword_query)
+
+    r_cards = search(query, f_cards)
+
+    if len(r_cards) == 0 or len(r_cards) == len(f_cards):
+        return []
+    else:
+        return r_cards
+
+
 def search(query: str, cards: list):
     """
     Realiza una búsqueda según un grupo de palabras dentro del nombre (atributo 'name') de cada carta.
@@ -60,8 +79,8 @@ def use_pc_keywords(cards: list, key_list: str):
         if char == "p":
             filtered_cards = [c for c in filtered_cards if c['permanent']]
         # TODO: c = carta característica. La mayoría de estas tiene "Solo para mazo de ..."
-        # if char == "c":
-        #    filtered_cards = [c for c in filtered_cards if c['permanent']]
+        if char == "c":
+            filtered_cards = [c for c in filtered_cards if "Sólo para el mazo de" in c['text']]
 
     return filtered_cards
 
@@ -75,7 +94,22 @@ def use_ec_keywords(cards: list, key_list: str):
     """
     filtered_cards = cards
     for char in key_list.lower():
-        pass
+        if char.isdigit():
+            filtered_cards = [c for c in filtered_cards if is_lvl(c, int(char))]
+        if char == "e":
+            filtered_cards = [c for c in filtered_cards if c['type_code'] == "enemy"]
+        if char == "a":
+            filtered_cards = [c for c in filtered_cards if c['type_code'] == "act"]
+        if char == "p":
+            filtered_cards = [c for c in filtered_cards if c['type_code'] == "agenda"]
+        if char == "t":
+            filtered_cards = [c for c in filtered_cards if c['type_code'] == "treachery"]
+        if char == "s":
+            filtered_cards = [c for c in filtered_cards if c['type_code'] == "scenario"]
+        if char == "l":
+            filtered_cards = [c for c in filtered_cards if c['type_code'] == "location"]
+        if char == "j":
+            filtered_cards = [c for c in filtered_cards if c['faction_code'] == 'neutral']
     return filtered_cards
 
 
@@ -155,8 +189,6 @@ def hits_in_string(s1: str, s2: str):
     return hits
 
 
-
-
 def get_qty(deck, card_id):
     for c_id, qty in deck['slots'].items():
         if c_id == card_id:
@@ -171,6 +203,7 @@ def has_trait(card, trait):
 
     except KeyError:
         return False
+
 
 def color_picker(c):
     colors = {

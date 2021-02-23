@@ -26,7 +26,7 @@ def format_inv_card_f_short(c):
                 "skills": format_inv_skills(c),
                 "health_sanity": format_text("%s%s" % ("[health] %s " % c['health'], "[sanity] %s" % c['sanity'])),
                 }
-    text = "%(class)s %(name)s [%(skills)s] [%(health_sanity)s]" % formater
+    text = "%(class)s %(name)s %(skills)s| %(health_sanity)s" % formater
     return text
 
 
@@ -35,7 +35,7 @@ def format_player_card_short(c, qty=0):
                 "level": "%s" % format_xp(c),
                 "class": faction_order[c['faction_code']] + format_faction(c),
                 "quantity": "x%s" % str(qty) if qty > 1 else "",
-                "subname": ": _%s_" % c['subname'] if ("subname" in c) else "" # and not c["is_unique"]) else ""
+                "subname": ": _%s_" % c['subname'] if ("subname" in c and not c["is_unique"]) else ""
                 }
     text = "%(class)s %(name)s%(level)s%(subname)s %(quantity)s" % formater
     return text
@@ -87,6 +87,27 @@ def format_text(text):
 
     for key, value in text_format.items():
         text = text.replace(key, value)
+    return text
+
+
+def format_slot(c):
+    formater = {
+        "Accessory.": "<:Accesorio:813546875856355359>",
+        "Ally.": "<:Aliado:813546887989821472>",
+        "Arcane.": "<:huecoarcano:813551281791959040>",
+        "Arcane x2.": "<:Dosarcanos:813552984432050186>",
+        "Body.": "<:Cuerpo:813546864074162226>",
+        "Hand.": "<:Mano:813546904428347402>",
+        "Hand x2.": "<:Dosmanos:813546852083302460>",
+        "Tarot.": "<:Tarot:813551294156767232>"
+    }
+    text = ""
+
+    for key, value in formater.items():
+        traits = c["real_slot"] + "."
+        if key in traits:
+            text += value
+
     return text
 
 

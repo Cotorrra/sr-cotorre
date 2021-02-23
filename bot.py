@@ -50,27 +50,17 @@ async def send_help(ctx):
     await ctx.send(res)
 
 
+
+
+
 @bot.command(name='hj')
 async def look_for_player_card(ctx):
     skip = False
     query = ' '.join(ctx.message.content.split()[1:])
-    query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
-    query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
-    r_cards = sorted(ah_player.copy(), key=lambda card: card['name'])
 
-    if sub_text_mode:
-        r_cards = [c for c in r_cards if filter_by_subtext(c, sub_query)]
+    r_cards = card_search(query, ah_player, use_pc_keywords)
 
-    if keyword_mode:
-        r_cards = use_pc_keywords(r_cards, keyword_query)
-
-    r_cards = search(query, r_cards)
-
-    if len(r_cards) == 0 or len(r_cards) == len(ah_player):
-        response = "No encontré ninguna carta"
-        embed = False
-
-    else:
+    if r_cards:
         if r_cards[0]['name'] == "Debilidad básica aleatoria":
             skip = True
             response = "No encontré ninguna carta"
@@ -94,6 +84,10 @@ async def look_for_player_card(ctx):
         if len(r_cards) > 1 and not skip:
             response += ""  # "\n\n Encontré otras cartas más: \n%s" % list_rest(r_cards[1:min(4, len(r_cards))])
 
+    else:
+        response = "No encontré ninguna carta"
+        embed = False
+
     if embed:
         await ctx.send(response, embed=embed)
     else:
@@ -116,20 +110,10 @@ async def look_for_deck(ctx, code: str):
 @bot.command(name='hm')
 async def look_for_encounter(ctx):
     query = ' '.join(ctx.message.content.split()[1:])
-    query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
-    query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
-    r_cards = sorted(ah_encounter.copy(), key=lambda card: card['name'])
-    if sub_text_mode:
-        r_cards = [c for c in r_cards if filter_by_subtext_ec(c, sub_query)]
-    if keyword_mode:
-        r_cards = use_ec_keywords(r_cards, keyword_query)
 
-    r_cards = search(query, r_cards)
+    r_cards = card_search(query, ah_player, use_ec_keywords)
 
-    if len(r_cards) == 0 or len(r_cards) == len(ah_encounter):
-        response = "No encontré ninguna carta"
-        embed = False
-    else:
+    if r_cards:
         if r_cards[0]['type_code'] == "investigator":
             response = "¡Carta de Investigador encontrada!"
             embed = format_inv_card_f(r_cards[0])
@@ -163,6 +147,9 @@ async def look_for_encounter(ctx):
 
         if len(r_cards) > 1:
             response += ""  # "\n\n Encontré otras cartas más: \n%s" % list_rest(r_cards[1:min(4, len(r_cards))])
+    else:
+        response = "No encontré ninguna carta"
+        embed = False
 
     if embed:
         await ctx.send(response, embed=embed)

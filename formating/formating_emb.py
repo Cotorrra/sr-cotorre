@@ -84,6 +84,7 @@ def format_player_card(c):
                 "subtext": format_subtext(c),
                 "faction": format_faction(c),
                 "type": "__%s__" % c['type_name'],
+                "slot": format_slot(c),
                 "traits": "*%s*\n" % c['traits'] if 'traits' in c else "",
                 "icons": "Iconos de Habilidad: %s\n" % format_skill_icons(c) if format_skill_icons(c) != "" else "",
                 "costs": "Coste: %s \n" % format_number(c['cost']) if "cost" in c else "",
@@ -95,14 +96,14 @@ def format_player_card(c):
                 "taboo_text": format_taboo_text(c['code'])
                 }
     m_title = "%(faction)s %(name)s%(subtext)s%(level)s" % formater
-    m_description = "%(type)s \n" \
+    m_description = "%(type)s %(slot)s\n" \
                     "%(traits)s" \
                     "%(costs)s" \
                     "%(icons)s\n" \
                     "%(text)s\n" \
                     "%(flavour)s " \
-                    "%(health_sanity)s \n" \
-                    "%(taboo_text)s" % formater
+                    "%(health_sanity)s" \
+                    "%(taboo_text)s\n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
 
@@ -129,9 +130,9 @@ def format_enemy_card(c):
     m_description = "%(type)s" \
                     "%(traits)s" \
                     "%(stats)s\n" \
-                    "%(text)s\n" \
-                    "%(attack)s" \
-                    "%(flavour)s " % formater
+                    "%(text)s" \
+                    "%(attack)s\n" \
+                    "%(flavour)s \n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
 
@@ -153,9 +154,9 @@ def format_act_card_f(c):
 
     m_title = "%(name)s " % formater
     m_description = "%(stage)s" \
-                    "%(clues)s" \
+                    "%(clues)s\n" \
                     "%(flavour)s" \
-                    "%(text)s" % formater
+                    "%(text)s \n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
 
@@ -176,9 +177,9 @@ def format_agenda_card_f(c):
 
     m_title = "%(name)s " % formater
     m_description = "%(stage)s" \
-                    "%(doom)s \n" \
+                    "%(doom)s\n" \
                     "%(flavour)s" \
-                    "%(text)s" % formater
+                    "%(text)s\n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
 
@@ -196,14 +197,14 @@ def format_location_card(c):
                 "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
                 "artist": format_illustrator(c),
                 "pack": format_set(c),
-                "shroud": "Velo: %s \n" % str(c['shroud']),
+                "shroud": "Velo: %s" % str(c['shroud']),
                 "clues": format_clues(c),
                 }
     m_title = "%(name)s%(subtext)s" % formater
     m_description = "%(traits)s" \
                     "%(shroud)s | %(clues)s \n" \
                     "%(text)s" \
-                    "%(flavour)s" % formater
+                    "%(flavour)s \n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
 
@@ -221,7 +222,7 @@ def format_scenario_card(c):
 
     m_title = "%(name)s" % formater
     m_description = "%(text)s \n" \
-                    "%(b_text)s " % formater
+                    "%(b_text)s \n" % formater
     m_footnote = "%(pack)s" % formater
 
     embed = discord.Embed(title=m_title, description=m_description, color=color_picker(c))
@@ -244,7 +245,7 @@ def format_treachery_card(c):
     m_description = "%(type)s" \
                     "%(traits)s \n" \
                     "%(text)s \n" \
-                    "%(flavour)s " % formater
+                    "%(flavour)s \n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(set)s" % formater
 
@@ -259,7 +260,7 @@ def format_inv_card_f(c):
                 "name": format_name(c),
                 "subname": format_subtext(c),
                 "skills":  "%s \n" % format_inv_skills(c),
-                "health_sanity": format_text("%s%s" % ("[health] %s " % c['health'], "[sanity] %s" % c['sanity'])),
+                "health_sanity": format_text("%s%s\n" % ("[health] %s " % c['health'], "[sanity] %s" % c['sanity'])),
                 "ability": "> %s \n" % format_card_text(c),
                 "artist": format_illustrator(c),
                 "pack": format_set(c),
@@ -271,8 +272,8 @@ def format_inv_card_f(c):
     m_description = "%(traits)s \n" \
                     "%(skills)s \n" \
                     "%(ability)s \n" \
-                    "%(health_sanity)s \n\n" \
-                    "%(taboo_text)s" % formater
+                    "%(health_sanity)s \n" \
+                    "%(taboo_text)s \n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
 
