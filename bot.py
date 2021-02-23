@@ -13,7 +13,6 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!a')
 
-
 ah_all_cards = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=1').json()
 
 ah_player = requests.get('https://es.arkhamdb.com/api/public/cards?encounter=0').json()
@@ -27,7 +26,10 @@ raw_text = False
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} está listo para usarse c:')
-    await bot.change_presence(activity=discord.Game(name="\"Arkham Horror LCG\""))
+
+    # await bot.change_presence(activity=discord.Game(name="\"Arkham Horror LCG\""))
+
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='Eric Zann'))
 
 
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
@@ -160,7 +162,7 @@ async def look_for_deck(ctx, code: str):
 async def look_for_encounter(ctx):
     query = ' '.join(ctx.message.content.split()[1:])
 
-    r_cards = card_search(query, ah_player, use_ec_keywords)
+    r_cards = card_search(query, ah_encounter, use_ec_keywords)
 
     if r_cards:
         if r_cards[0]['type_code'] == "investigator":
