@@ -100,9 +100,9 @@ def format_player_card(c):
                     "%(traits)s" \
                     "%(costs)s" \
                     "%(icons)s\n" \
-                    "%(text)s\n" \
+                    "%(text)s" \
+                    "%(health_sanity)s\n" \
                     "%(flavour)s " \
-                    "%(health_sanity)s" \
                     "%(taboo_text)s\n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
@@ -189,7 +189,7 @@ def format_agenda_card_f(c):
     return embed
 
 
-def format_location_card(c):
+def format_location_card_f(c):
     formater = {"name": format_name(c),
                 "subtext": format_subtext(c),
                 "traits": "*%s*\n" % c['traits'] if 'traits' in c else "",
@@ -259,20 +259,22 @@ def format_inv_card_f(c):
     formater = {"class": format_faction(c),
                 "name": format_name(c),
                 "subname": format_subtext(c),
-                "skills":  "%s \n" % format_inv_skills(c),
+                "skills": "%s \n" % format_inv_skills(c),
                 "health_sanity": format_text("%s%s\n" % ("[health] %s " % c['health'], "[sanity] %s" % c['sanity'])),
                 "ability": "> %s \n" % format_card_text(c),
                 "artist": format_illustrator(c),
                 "pack": format_set(c),
                 "traits": "*%s*\n" % c['traits'],
-                "taboo_text": format_taboo_text(c['code'])
+                "taboo_text": format_taboo_text(c['code']),
+                "flavour": "_%s_\n" % c['flavor'] if "flavor" in c else "",
                 }
 
     m_title = "%(class)s %(name)s %(subname)s " % formater
-    m_description = "%(traits)s \n" \
-                    "%(skills)s \n" \
-                    "%(ability)s \n" \
+    m_description = "%(skills)s" \
+                    "%(traits)s \n" \
+                    "%(ability)s" \
                     "%(health_sanity)s \n" \
+                    "%(flavour)s" \
                     "%(taboo_text)s \n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
@@ -280,4 +282,62 @@ def format_inv_card_f(c):
     embed = discord.Embed(title=m_title, description=m_description, color=color_picker(c))
     embed.set_footer(text=m_footnote)
     set_thumbnail_image(c, embed)
+    return embed
+
+
+def format_inv_card_b(c):
+    formater = {"class": format_faction(c),
+                "name": format_name(c),
+                "subname": format_subtext(c),
+                "deck_req": "> %s \n" % format_card_text(c, "back_text") if "back_text" in c else "",
+                "artist": format_illustrator(c),
+                "pack": format_set(c),
+                "flavour": "_%s_\n" % c['back_flavor'] if "back_flavor" in c else "",
+                }
+    m_title = "%(class)s %(name)s %(subname)s " % formater
+    m_description = "%(deck_req)s \n" \
+                    "%(flavour)s" % formater
+    m_footnote = "%(artist)s \n" \
+                 "%(pack)s" % formater
+
+    embed = discord.Embed(title=m_title, description=m_description, color=color_picker(c))
+    embed.set_footer(text=m_footnote)
+    set_thumbnail_image(c, embed, True)
+    return embed
+
+
+def format_location_card_b(c):
+    formater = {"name": format_name(c),
+                "back": "> %s \n" % format_card_text(c, "back_text") if "back_text" in c else "",
+                "artist": format_illustrator(c),
+                "pack": format_set(c),
+                "flavour": "_%s_\n" % c['back_flavor'] if "back_flavor" in c else "",
+                }
+    m_title = "%(name)s" % formater
+    m_description = "%(back)s \n" \
+                    "%(flavour)s" % formater
+    m_footnote = "%(artist)s \n" \
+                 "%(pack)s" % formater
+
+    embed = discord.Embed(title=m_title, description=m_description, color=color_picker(c))
+    embed.set_footer(text=m_footnote)
+    set_thumbnail_image(c, embed, True)
+    return embed
+
+
+def format_general_card_b(c):
+    formater = {"name": format_name(c),
+                "subname": format_subtext(c),
+                "back": "> %s \n" % format_card_text(c, "back_text") if "back_text" in c else "",
+                "pack": format_set(c),
+                "flavour": "_%s_\n" % c['back_flavor'] if "back_flavor" in c else "",
+                }
+    m_title = "%(name)s %(subname)s" % formater
+    m_description = "%(back)s \n" \
+                    "%(flavour)s" % formater
+    m_footnote = "%(pack)s" % formater
+
+    embed = discord.Embed(title=m_title, description=m_description, color=color_picker(c))
+    embed.set_footer(text=m_footnote)
+    set_thumbnail_image(c, embed, True)
     return embed

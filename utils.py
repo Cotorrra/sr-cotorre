@@ -108,8 +108,11 @@ def use_ec_keywords(cards: list, key_list: str):
             filtered_cards = [c for c in filtered_cards if c['type_code'] == "scenario"]
         if char == "l":
             filtered_cards = [c for c in filtered_cards if c['type_code'] == "location"]
+        if char == "i":
+            filtered_cards = [c for c in filtered_cards if c['faction_code'] == 'investigator']
         if char == "j":
             filtered_cards = [c for c in filtered_cards if c['faction_code'] == 'neutral']
+
     return filtered_cards
 
 

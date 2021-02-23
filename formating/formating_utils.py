@@ -220,9 +220,9 @@ def format_faction(c):
         return format_text("[%s]" % c['faction_code'])
 
 
-def format_card_text(c):
+def format_card_text(c, tag="text"):
     formating = {"\n": "\n> "}
-    text = format_text(c['text'])
+    text = format_text(c[tag])
     for key, value in formating.items():
         text = text.replace(key, value)
     return text
@@ -298,9 +298,15 @@ def format_special_upgr(info):
     return text
 
 
-def set_thumbnail_image(c, embed):
+def set_thumbnail_image(c, embed, back=False):
     if "imagesrc" in c:
-        embed.set_thumbnail(url="https://arkhamdb.com%s" % c["imagesrc"])
+        if back:
+            if "backimagesrc" in c:
+                embed.set_thumbnail(url="https://arkhamdb.com%s" % c["backimagesrc"])
+            else:
+                embed.set_thumbnail(url="https://arkhamdb.com%s" % c["imagesrc"])
+        else:
+            embed.set_thumbnail(url="https://arkhamdb.com%s" % c["imagesrc"])
 
 
 def format_illustrator(c):
