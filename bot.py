@@ -30,7 +30,7 @@ async def on_ready():
     # await bot.change_presence(activity=discord.Game(name="\"Arkham Horror LCG\""))
 
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='Eric Zann'))
-
+    # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='tus Pensamientos'))
 
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
 # async def look_for_taboo(ctx):

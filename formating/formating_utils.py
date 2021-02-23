@@ -102,11 +102,11 @@ def format_slot(c):
         "Tarot.": "<:Tarot:813551294156767232>"
     }
     text = ""
-
-    for key, value in formater.items():
-        traits = c["real_slot"] + "."
-        if key in traits:
-            text += value
+    if "real_slot" in c:
+        for key, value in formater.items():
+            traits = c["real_slot"] + "."
+            if key in traits:
+                text += value
 
     return text
 
