@@ -1,5 +1,7 @@
 import json
 
+from core.formating import format_text
+
 current_taboo = "003"
 
 
@@ -8,7 +10,7 @@ def load_taboo():
     Carga el archivo de taboo.
     :return:
     """
-    with open('data/taboos.json') as taboo:
+    with open('taboo/data/taboos.json') as taboo:
         info = list(json.load(taboo))
 
     for t in info:
@@ -76,4 +78,21 @@ def calculate_xp(c, qty, taboo_ver=current_taboo):
         return chain * qty
 
 
+def format_taboo_text(card_id, version=current_taboo):
+    text = "Tabú más reciente: \n"
+    if is_in_taboo(card_id, version):
+        card = get_tabooed_card(card_id, version)
+        if 'xp' in card:
+            if card['xp'] >= 0:
+                text += "> Encadenada: +%d de experiencia \n" % card['xp']
+            else:
+                text += "> Desencadenada: %d de experiencia \n" % card['xp']
+        if 'text' in card:
+            text += "> %s \n" % format_text(card['text'])
+        return text
+    else:
+        return ""
+
+
 taboo_info = load_taboo()
+

@@ -1,66 +1,7 @@
-import requests
-
-from formating.formating_utils import format_player_card_short
-from utils import *
-from taboo import *
-
-
-def find_former_deck(code: str):
-    curr_deck = find_deck(code)
-    if curr_deck:
-        former_code = str(curr_deck["previous_deck"])
-        former_deck = find_deck(former_code)
-        if former_deck:
-            return former_deck
-        else:
-            return False
-    return False
-
-
-def format_deck_cards(deck, cards):
-    info = {"assets": [], "events": [], "skills": [], "treachery": [], "permanents": [], "assets_q": 0, "events_q": 0,
-            "skills_q": 0, "treachery_q": 0, "permanents_q": 0,
-            "xp": 0, "color": get_color_by_investigator(deck, cards)}
-    taboo_version = "00" + str(deck['taboo_id'])
-    for c_id, qty in deck['slots'].items():
-        card = [c for c in cards if c['code'] == c_id][0]
-        text = format_player_card_short(card, qty)
-        info["xp"] += calculate_xp(card, qty, taboo_version)
-
-        # if card['permanent']:
-        #    info['permanents'].append(text)
-        #    info['permanents_q'] += qty
-        # el
-        if card['type_code'] == "asset":
-            info['assets'].append(text)
-            info['assets_q'] += qty
-        elif card['type_code'] == "event":
-            info['events'].append(text)
-            info['events_q'] += qty
-        elif card['type_code'] == "skill":
-            info['skills'].append(text)
-            info['skills_q'] += qty
-        else:
-            info['treachery'].append(text)
-            info['treachery_q'] += qty
-
-    info['assets'] = sorted(info['assets'])
-    info['events'] = sorted(info['events'])
-    info['skills'] = sorted(info['skills'])
-    info['treachery'] = sorted(info['treachery'])
-    info['permanents'] = sorted(info['permanents'])
-    return info
-
-
-def find_deck(code: str):
-    link = 'https://es.arkhamdb.com/api/public/deck/%s' % code
-    req = requests.get(link)
-    if req.url != link:
-        link = 'https://es.arkhamdb.com/api/public/decklist/%s' % code
-        req = requests.get(link)
-        if req.url != link:
-            req = False
-    return req.json()
+from core.search import find_by_id
+from core.utils import has_trait, get_qty
+from p_cards.utils import get_color_by_investigator
+from taboo.taboo import *
 
 
 def diff_decks(a_deck1, a_deck2):

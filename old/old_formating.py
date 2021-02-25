@@ -1,7 +1,12 @@
-from formating.formating_utils import *
+from core.formating import format_faction, format_number, format_card_text, format_set, format_text
+from decks.formating import format_upgrades, in_out_len, format_special_upgr, make_string
+from e_cards.formating_utils import format_enemy_stats, format_attack, format_clues
+from p_cards.utils import format_xp, format_skill_icons, format_health_sanity, format_inv_skills
 
 
 # Este módulo está sólo para mirarlo c:
+from taboo.taboo import format_taboo_text
+
 
 def format_deck(deck, info):
     formater = {"name": "**%s**" % deck['name'],
