@@ -30,9 +30,9 @@ def format_player_card(c):
                     "%(costs)s" \
                     "%(icons)s\n" \
                     "%(text)s" \
+                    "%(victory)s" \
                     "%(health_sanity)s\n" \
                     "%(flavour)s " \
-                    "%(victory)s\n" \
                     "%(taboo_text)s\n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater

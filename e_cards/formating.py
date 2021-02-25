@@ -25,10 +25,10 @@ def format_enemy_card(c):
                     "%(traits)s" \
                     "%(stats)s\n" \
                     "%(text)s" \
-                    "%(attack)s\n" \
-                    "%(flavour)s \n" \
                     "%(victory)s" \
-                    "%(vengeance)s\n" % formater
+                    "%(vengeance)s\n" \
+                    "%(attack)s\n" \
+                    "%(flavour)s \n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
 
@@ -102,9 +102,9 @@ def format_location_card_f(c):
     m_description = "%(traits)s" \
                     "%(shroud)s | %(clues)s \n" \
                     "%(text)s" \
-                    "%(flavour)s \n" \
                     "%(victory)s" \
-                    "%(vengeance)s\n" % formater
+                    "%(vengeance)s\n" \
+                    "%(flavour)s \n" % formater
     m_footnote = "%(artist)s \n" \
                  "%(pack)s" % formater
 

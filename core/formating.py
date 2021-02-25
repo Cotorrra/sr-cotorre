@@ -69,14 +69,14 @@ def format_card_text(c, tag="text"):
 
 def format_victory(c):
     if "victory" in c:
-        return "**Victoria %s.**\n" % c['victory']
+        return "> **Victoria %s.**\n" % c['victory']
     else:
         return ""
 
 
 def format_vengeance(c):
     if "vengeance" in c:
-        return "**Venganza %s.**\n" % c['vengeance']
+        return "> **Venganza %s.**\n" % c['vengeance']
     else:
         return ""
 
