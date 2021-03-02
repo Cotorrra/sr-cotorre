@@ -33,8 +33,8 @@ async def on_ready():
 
     # await bot.change_presence(activity=discord.Game(name="Mod de Parri"))
     # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='Eric Zann'))
-    # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='tus Pensamientos'))
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='El Rey de Amarillo (Acto 2)'))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='tus Pensamientos'))
+    # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='El Rey de Amarillo (Acto 2)'))
 
 
 # @bot.command(name='t', help='Busca el registro de tabú de la carta pedida')
@@ -76,7 +76,6 @@ async def look_for_card_back(ctx):
         await ctx.send(response, embed=embed)
     else:
         await ctx.send(response)
-
 
 
 @bot.command(name='hj')
@@ -131,6 +130,14 @@ async def look_for_upgrades(ctx):
         await ctx.send(response)
 
 
+@bot.command(name='hw')
+async def pick_weakness(ctx):
+    query = ctx.message.content.split()[1:]
 
+    response, embed = search_for_upgrades(query, ah_player)
+    if embed:
+        await ctx.send(response, embed=embed)
+    else:
+        await ctx.send(response)
 
 bot.run(TOKEN)

@@ -11,7 +11,7 @@ def find_deck(code: str):
         link = 'https://es.arkhamdb.com/api/public/decklist/%s' % code
         req = requests.get(link)
         if req.url != link:
-            req = False
+            return False
     return req.json()
 
 
