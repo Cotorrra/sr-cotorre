@@ -31,6 +31,7 @@ def deck_to_array(deck, cards):
 
 
 def check_upgrade_rules(deck1, deck2, cards):
+    # Getting versatile reduces the cost of the cards of lvl 0
     info = {"buys_in": [], "buys_out": [],
             "xp_diff": 0, "color": get_color_by_investigator(deck1, cards)}
     taboo = "00" + str(deck1['taboo_id'])
@@ -126,3 +127,4 @@ def pick_card(pool, pool2):
         if find_lower_lvl_card(c, pool2):
             return c
     return pool[0]
+

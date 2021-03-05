@@ -61,7 +61,7 @@ def format_set(c):
 
 def format_card_text(c, tag="text"):
     formating = {"\n": "\n> "}
-    text = format_text(c[tag])
+    text = format_text(c[tag]) if tag in c else ""
     for key, value in formating.items():
         text = text.replace(key, value)
     return text

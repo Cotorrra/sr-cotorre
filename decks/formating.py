@@ -80,6 +80,7 @@ def format_upgraded_deck(deck1, info):
 
     return embed
 
+
 def format_deck_cards(deck, cards):
     info = {"assets": [], "events": [], "skills": [], "treachery": [], "permanents": [], "assets_q": 0, "events_q": 0,
             "skills_q": 0, "treachery_q": 0, "permanents_q": 0,
