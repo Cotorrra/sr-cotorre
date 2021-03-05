@@ -67,7 +67,7 @@ def calculate_xp(c, qty, taboo_ver=current_taboo):
             chain = get_tabooed_card(c['code'], taboo_ver)['xp']
 
     if "xp" in c:
-        if c['myriad']:
+        if c['myriad'] or 'Myriad.' in c['real_text']:
             return c['xp'] + chain
         elif c['exceptional']:
             # Aunque debería haber 1 en el mazo...

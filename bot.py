@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 from backs.search import resolve_back_search
 from core.resolve import resolve_search
 from core.search import card_search
-from decks.formating import format_deck, format_deck_cards
+from decks.formating import format_deck
+from decks.deck import extract_deck_info
 from decks.search import search_for_upgrades, find_deck
 from e_cards.search import use_ec_keywords
 from p_cards.search import use_pc_keywords
@@ -100,7 +101,7 @@ async def look_for_deck(ctx, code: str):
         response = "Mazo no encontrado"
         await ctx.send(response)
     else:
-        deck_info = format_deck_cards(deck, ah_all_cards)
+        deck_info = extract_deck_info(deck, ah_all_cards)
         embed = format_deck(deck, deck_info)
         response = "¡Mazo Encontrado!"
         await ctx.send(response, embed=embed)

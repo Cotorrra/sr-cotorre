@@ -2,6 +2,7 @@ from core.search import find_by_id
 from core.utils import has_trait, get_qty
 from p_cards.utils import get_color_by_investigator
 from taboo.taboo import *
+from taboo.taboo import calculate_xp
 
 
 def diff_decks(a_deck1, a_deck2):
@@ -127,4 +128,60 @@ def pick_card(pool, pool2):
         if find_lower_lvl_card(c, pool2):
             return c
     return pool[0]
+
+
+def extract_deck_info(deck, cards):
+    info = {"assets_o": [], "assets_h": [], "assets_h2": [], "assets_b": [],
+            "assets_acc": [], "assets_ar": [], "assets_ar2": [], "assets_ally": [],
+            "permanents": [], "events": [], "skills": [], "treachery": [],
+            "assets_q": 0, "events_q": 0, "skills_q": 0, "treachery_q": 0, "permanents_q": 0,
+            "xp": 0, "color": get_color_by_investigator(deck, cards)}
+    taboo_version = "00" + str(deck['taboo_id'])
+    for c_id, qty in deck['slots'].items():
+        card = find_by_id(c_id, cards)
+        text = (card, qty)
+        info["xp"] += calculate_xp(card, qty, taboo_version)
+
+        if card['type_code'] == 'permanents':
+            info['permanents'].append(text)
+            info['permanents_q'] += qty
+
+        elif card['type_code'] == "asset":
+            info['assets_q'] += qty
+            if card['real_slot'] == 'Hand':
+                info['assets_h'].append(text)
+
+            elif card['real_slot'] == 'Hand x2':
+                info['assets_h2'].append(text)
+
+            elif card['real_slot'] == 'Arcane':
+                info['assets_ar'].append(text)
+
+            elif card['real_slot'] == 'Arcane x2':
+                info['assets_ar2'].append(text)
+
+            elif card['real_slot'] == 'Accessory':
+                info['assets_acc'].append(text)
+
+            elif card['real_slot'] == 'Body':
+                info['assets_b'].append(text)
+
+            elif card['real_slot'] == 'Ally':
+                info['assets_ally'].append(text)
+
+            else:
+                info['assets_o'].append(text)
+
+        elif card['type_code'] == "event":
+            info['events'].append(text)
+            info['events_q'] += qty
+
+        elif card['type_code'] == "skill":
+            info['skills'].append(text)
+            info['skills_q'] += qty
+        else:
+            info['treachery'].append(text)
+            info['treachery_q'] += qty
+
+    return info
 
