@@ -16,7 +16,7 @@ def format_player_card(c):
                 "traits": "*%s*\n" % c['traits'] if 'traits' in c else "",
                 "icons": "Iconos de Habilidad: %s\n" % format_skill_icons(c) if format_skill_icons(c) != "" else "",
                 "costs": "Coste: %s \n" % format_number(c['cost']) if "cost" in c else "",
-                "text": "> %s \n" % format_card_text(c),
+                "text": "> %s \n" % format_card_text(c) if "text" in c else "",
                 "flavour": "_%s_\n" % format_text(c['flavor']) if "flavor" in c else "",
                 "artist": format_illustrator(c),
                 "pack": format_set(c),
