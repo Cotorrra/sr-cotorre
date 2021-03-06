@@ -81,7 +81,6 @@ async def look_for_card_back(ctx):
 
 @bot.command(name='hj')
 async def look_for_player_card(ctx):
-    skip = False
     query = ' '.join(ctx.message.content.split()[1:])
 
     r_cards = card_search(query, ah_player, use_pc_keywords)
@@ -122,17 +121,6 @@ async def look_for_encounter(ctx):
 
 @bot.command(name='hu')
 async def look_for_upgrades(ctx):
-    query = ctx.message.content.split()[1:]
-
-    response, embed = search_for_upgrades(query, ah_player)
-    if embed:
-        await ctx.send(response, embed=embed)
-    else:
-        await ctx.send(response)
-
-
-@bot.command(name='hw')
-async def pick_weakness(ctx):
     query = ctx.message.content.split()[1:]
 
     response, embed = search_for_upgrades(query, ah_player)

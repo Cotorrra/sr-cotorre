@@ -42,18 +42,20 @@ def format_deck(deck, info):
     m_description = "%(investigator)s \n" \
                     "%(xp)s" % formater
 
+    inline = False
+
     embed = discord.Embed(title=m_title, description=m_description, color=info['color'])
     if info['assets_q'] > 0:
-        embed.add_field(name="%(assets)s" % formater, value=format_all_assets(info))
+        embed.add_field(name="%(assets)s" % formater, value=format_all_assets(info), inline=inline)
 
     if info['events_q'] > 0:
-        embed.add_field(name="%(events)s" % formater, value=format_list_of_cards(info['events']))
+        embed.add_field(name="%(events)s" % formater, value=format_list_of_cards(info['events']), inline=inline)
 
     if info['skills_q'] > 0:
-        embed.add_field(name="%(skills)s" % formater, value=format_list_of_cards(info['skills']))
+        embed.add_field(name="%(skills)s" % formater, value=format_list_of_cards(info['skills']), inline=inline)
 
     if info['treachery_q'] > 0:
-        embed.add_field(name="%(treachery)s" % formater, value=format_list_of_cards(info['treachery']))
+        embed.add_field(name="%(treachery)s" % formater, value=format_list_of_cards(info['treachery']), inline=inline)
 
     return embed
 

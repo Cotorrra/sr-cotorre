@@ -31,6 +31,6 @@ def use_pc_keywords(cards: list, key_list: str):
         if char == "p":
             filtered_cards = [c for c in filtered_cards if c['permanent']]
         if char == "c":
-            filtered_cards = [c for c in filtered_cards if "Sólo para el mazo de" in c['text']]
+            filtered_cards = [c for c in filtered_cards if "deck only." in c['real_text']]
 
     return filtered_cards

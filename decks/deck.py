@@ -32,7 +32,7 @@ def deck_to_array(deck, cards):
 
 
 def check_upgrade_rules(deck1, deck2, cards):
-    # Getting versatile reduces the cost of the cards of lvl 0
+
     info = {"buys_in": [], "buys_out": [],
             "xp_diff": 0, "color": get_color_by_investigator(deck1, cards)}
     taboo = "00" + str(deck1['taboo_id'])
@@ -42,6 +42,7 @@ def check_upgrade_rules(deck1, deck2, cards):
 
     arcane_inv_used = False
     adaptable_uses = 0
+    versatile_uses = 0
     inv_meta = json.loads(deck1['meta'])
     parallel_upg = False
     if "alternative_back" in inv_meta:
@@ -65,14 +66,21 @@ def check_upgrade_rules(deck1, deck2, cards):
 
         # Adaptable
         elif (c_in["xp"] if "xp" in c_in else -1) == 0:
-            if get_qty(deck1, "02110") * 2 > adaptable_uses:
+            if get_qty(deck1, "02110") * 2 > adaptable_uses and get_lvl_zero_card(diff_out):
                 c_out = get_lvl_zero_card(diff_out)
                 move_card_in_array(info["buys_in"], diff_in, c_in)
                 move_card_in_array(info["buys_out"], diff_out, c_out)
                 adaptable_uses += 1
+            elif versatile_uses < (get_qty(deck2, "06167") - get_qty(deck1, "06167")) * 5:
+                move_card_in_array(info["buys_in"], diff_in, c_in)
+                info['xp_diff'] += calculate_xp(c_in, 1, taboo)
+                versatile_uses += 1
             else:
                 move_card_in_array(info["buys_in"], diff_in, c_in)
                 info['xp_diff'] += max(calculate_xp(c_in, 1, taboo), 1)
+
+        # Versatile buy
+        # Getting versatile reduces the cost of up to 5 cards of lvl 0
 
         # Mejora Paralela
         elif parallel_upg and find_lower_lvl_card(c_in, deck1):

@@ -12,7 +12,7 @@ def card_search(query, cards, keyword_func):
     """
     query, keyword_query, keyword_mode = find_and_extract(query, "(", ")")
     query, sub_query, sub_text_mode = find_and_extract(query, "~", "~")
-    f_cards = sorted(cards.copy(), key=lambda card: card['name'])
+    f_cards = cards.copy()
 
     if sub_text_mode:
         f_cards = [c for c in f_cards if filter_by_subtext(c, sub_query)]
@@ -35,7 +35,7 @@ def search(query: str, cards: list):
     :param cards: Cartas
     :return:
     """
-    r_cards = sorted(cards, key=lambda card: -hits_in_string(card['name'], query))
+    r_cards = sorted(cards, key=lambda card: -hits_in_string(query, card['name']))
 
     # Sales en los resultados aparte si estas igual de hits con las palabras
     r_cards = [c for c in r_cards if hits_in_string(c['name'], query) == hits_in_string(r_cards[0]['name'], query)]
@@ -89,7 +89,7 @@ def find_and_extract(string: str, start_s: str, end_s: str):
     return base, extract, enable
 
 
-def hits_in_string(s1: str, s2: str):
+def hits_in_string(query: str, find: str):
     """
     Retorna la cantidad de veces únicas en las que un string contiene una palabra en el otro.
     Va por palabras.6,mnbvcxz<
@@ -98,11 +98,14 @@ def hits_in_string(s1: str, s2: str):
     :return:
     """
     hits = 0
-    for w1 in list(set(s1.lower().split())):
-        for w2 in list(set(s2.lower().split())):
+    set1 = list(query.lower().split())
+    set2 = list(find.lower().split())
+    for w1 in set1:
+        for w2 in set2:
             w1_c = re.sub(r'[^a-z0-9]', '', unidecode.unidecode(w1))
             w2_c = re.sub(r'[^a-z0-9]', '', unidecode.unidecode(w2))
             if w1_c == w2_c:
                 hits += 1
+
     return hits
 
