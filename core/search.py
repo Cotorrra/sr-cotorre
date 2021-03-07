@@ -98,14 +98,18 @@ def hits_in_string(query: str, find: str):
     :return:
     """
     hits = 0
-    set1 = list(query.lower().split())
-    set2 = list(find.lower().split())
+    set1 = query.lower().split()
+    set2 = find.lower().split()
+    hit_list = []
     for w1 in set1:
         for w2 in set2:
             w1_c = re.sub(r'[^a-z0-9]', '', unidecode.unidecode(w1))
             w2_c = re.sub(r'[^a-z0-9]', '', unidecode.unidecode(w2))
-            if w1_c == w2_c:
+            if w1_c == w2_c and w1_c not in hit_list:
                 hits += 1
-
+                hit_list.append(w1_c)
+                if set1.index(w1) == set2.index(w2):
+                    hits += 1
     return hits
+
 

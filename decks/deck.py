@@ -156,27 +156,29 @@ def extract_deck_info(deck, cards):
 
         elif card['type_code'] == "asset":
             info['assets_q'] += qty
-            if card['real_slot'] == 'Hand':
-                info['assets_h'].append(text)
+            if 'real_slot' in card:
+                if card['real_slot'] == 'Hand':
+                    info['assets_h'].append(text)
 
-            elif card['real_slot'] == 'Hand x2':
-                info['assets_h2'].append(text)
+                elif card['real_slot'] == 'Hand x2':
+                    info['assets_h2'].append(text)
 
-            elif card['real_slot'] == 'Arcane':
-                info['assets_ar'].append(text)
+                elif card['real_slot'] == 'Arcane':
+                    info['assets_ar'].append(text)
 
-            elif card['real_slot'] == 'Arcane x2':
-                info['assets_ar2'].append(text)
+                elif card['real_slot'] == 'Arcane x2':
+                    info['assets_ar2'].append(text)
 
-            elif card['real_slot'] == 'Accessory':
-                info['assets_acc'].append(text)
+                elif card['real_slot'] == 'Accessory':
+                    info['assets_acc'].append(text)
 
-            elif card['real_slot'] == 'Body':
-                info['assets_b'].append(text)
+                elif card['real_slot'] == 'Body':
+                    info['assets_b'].append(text)
 
-            elif card['real_slot'] == 'Ally':
-                info['assets_ally'].append(text)
-
+                elif card['real_slot'] == 'Ally':
+                    info['assets_ally'].append(text)
+                else:
+                    info['assets_o'].append(text)
             else:
                 info['assets_o'].append(text)
 
